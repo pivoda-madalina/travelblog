@@ -5,6 +5,8 @@ import '@fontsource/inter/700.css';
 import '@fontsource/lora/400.css';
 import '@fontsource/lora/600.css';
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
+import '@mantine/dropzone/styles.css';
 import '@mantine/notifications/styles.css';
 
 import { StrictMode } from 'react';

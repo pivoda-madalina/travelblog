@@ -22,6 +22,11 @@ class ResizeObserverStub {
 }
 window.ResizeObserver = ResizeObserverStub;
 
+// The autosizing Textarea listens for font loading.
+Object.defineProperty(document, 'fonts', {
+  value: { addEventListener: () => {}, removeEventListener: () => {} },
+});
+
 // Tests that mock fetch with vi.stubGlobal() get the real one back afterwards.
 afterEach(() => {
   vi.unstubAllGlobals();

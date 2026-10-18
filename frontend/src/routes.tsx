@@ -1,6 +1,7 @@
 import type { RouteObject } from 'react-router';
 
 import { Layout } from './components/Layout';
+import { NewTripPage } from './pages/NewTripPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { SignInPage } from './pages/SignInPage';
 import { TripListPage } from './pages/TripListPage';
@@ -12,6 +13,7 @@ export const routes: RouteObject[] = [
     element: <Layout />,
     children: [
       { index: true, element: <TripListPage /> },
+      { path: 'trips/new', element: <NewTripPage /> },
       { path: 'trips/:tripId', element: <TripPage /> },
       { path: 'map', element: <WorldMapPage /> },
       { path: 'sign-in', element: <SignInPage /> },
