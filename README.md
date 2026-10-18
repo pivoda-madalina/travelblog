@@ -1,5 +1,7 @@
 # Travel Blog
 
+[![CI](https://github.com/pivoda-madalina/travelblog/actions/workflows/ci.yml/badge.svg)](https://github.com/pivoda-madalina/travelblog/actions/workflows/ci.yml)
+
 A personal travel website where one author records trips, shows every visited place on an interactive world map, writes a day-by-day journal with photos, and tracks trip spending across currencies, converted to RON at National Bank of Romania rates.
 
 > **Status:** in development. Setup and run instructions will be added once the project is scaffolded.

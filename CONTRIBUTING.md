@@ -7,7 +7,7 @@ How work moves from an idea to `main`. The goal is a history a reviewer can read
 1. **Start from an issue.** Every change has an issue. User stories reference their ID (US-01 to US-13) and the business rules they touch (BR-01 to BR-14).
 2. **Move the issue to In progress** on the project board.
 3. **Create a branch from `main`** named `<type>/<issue-number>-<short-description>`, for example `feat/8-create-trip` or `test/14-nbr-rate-fallback`.
-4. **Commit in small, focused steps** using the commit message format below.
+4. **Commit in small, focused steps** using the commit message format below. Run `uvx pre-commit install` once per clone, so Ruff, ESLint, Prettier and the whitespace and large-file checks run before every commit.
 5. **Open a pull request** as soon as there is something to look at (draft pull requests are fine). Use the template, write `Closes #<issue-number>` and fill in the checklist.
 6. **Wait for CI to pass**, then review the diff yourself against the definition of done.
 7. **Squash and merge.** The pull request title becomes the commit on `main`, so it must follow the commit message format. Delete the branch afterwards.
