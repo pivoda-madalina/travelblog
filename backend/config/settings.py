@@ -4,6 +4,8 @@
 import os
 from pathlib import Path
 
+from django.core.exceptions import ImproperlyConfigured
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -15,9 +17,15 @@ def env_list(name: str, default: str) -> list[str]:
     return [item.strip() for item in os.environ.get(name, default).split(",") if item.strip()]
 
 
-# The fallback key only exists so that tests and a fresh checkout run without setup.
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-local-development-only")
 DEBUG = env_bool("DJANGO_DEBUG", default=False)
+
+# The fallback key only exists so that a fresh checkout runs in debug mode without setup.
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY") or (
+    "django-insecure-local-development-only" if DEBUG else ""
+)
+if not SECRET_KEY:
+    raise ImproperlyConfigured("Set DJANGO_SECRET_KEY, or DJANGO_DEBUG=true for local development.")
+
 ALLOWED_HOSTS = env_list("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1")
 
 INSTALLED_APPS = [
@@ -67,7 +75,8 @@ DATABASES = {
         "USER": os.environ.get("POSTGRES_USER", "travelblog"),
         "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "travelblog"),
         "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
-        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+        # 5433 is the host port Docker Compose publishes the database on.
+        "PORT": os.environ.get("POSTGRES_PORT", "5433"),
     }
 }
 
