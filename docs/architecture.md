@@ -63,7 +63,7 @@ Deleting a trip cascades to its places, journal entries, photos and expenses (BR
 - **NBR rates are per unit.** Some currencies are published per 100 units (for example HUF and JPY), so the client divides by the published multiplier before saving.
 - **External services sit behind thin client modules** (`budget/nbr.py`, `places/geocoding.py`) with timeouts, and their failures return a clear error instead of a crash. Tests never call the network; HTTP is mocked with respx.
 - **API design:** plural resource names (`/api/trips/`, `/api/places/?trip=12`), standard DRF error format, no pagination (the data set is small).
-- **Permissions:** the default is read-only for anonymous users. Draft trips and everything under them return 404 to visitors, so their existence is not revealed. Budget and expense endpoints require sign-in, including for reads (BR-14).
+- **Permissions:** the default is read-only for anonymous users. Draft trips and everything under them return 404 to visitors, so their existence is not revealed. Budget and expense endpoints require sign-in, including for reads (BR-14). Endpoints build on the shared pieces: `TripVisibilityMixin` and `IsAuthor` in `core/permissions.py`, and `AuthorOnlyFieldsMixin` in `core/serializers.py` for fields such as `planned_budget`. A shared test in `core/tests/` finds every endpoint under `/api/` and checks that visitors cannot write to it.
 - **Authentication:** Django session authentication with CSRF protection. The frontend is served from the same origin, through the Vite proxy in development (see [ADR 0002](adr/0002-session-authentication.md)).
 - **Configuration comes from environment variables.** `.env.example` lists them; real secrets are never committed.
 
