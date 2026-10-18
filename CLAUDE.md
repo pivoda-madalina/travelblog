@@ -22,7 +22,7 @@ Portfolio project for a full-stack developer interview. One author, desktop brow
 
 ## Commands
 
-To be filled in when the project is scaffolded (#1 to #3): `make up`, `make test`, `make lint`, `make seed`.
+From the repository root, with Docker running: `make up` (site on http://localhost:5173), `make down`, `make logs`, `make test`, `make lint`, `make seed`, `make createsuperuser`. The Compose database is published on host port 5433.
 
 Backend, from `backend/`: `uv run pytest`, `uv run ruff check .`, `uv run ruff format .`, `uv run python manage.py check`.
 
