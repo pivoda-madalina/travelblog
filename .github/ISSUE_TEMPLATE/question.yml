@@ -1,0 +1,19 @@
+name: Question
+description: An open product or technical question that needs a decision
+labels: ["type: question"]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: What depends on the answer
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed answer
+      description: A default that work can proceed with until the question is decided.

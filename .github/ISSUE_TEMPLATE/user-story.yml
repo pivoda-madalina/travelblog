@@ -1,0 +1,30 @@
+name: User story
+description: A feature described from the author's or a visitor's point of view
+title: "US-XX: "
+labels: ["type: story"]
+body:
+  - type: textarea
+    id: story
+    attributes:
+      label: Story
+      placeholder: As the author, I want ..., so that ...
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Conditions that must hold for the story to count as done, as a checklist.
+      placeholder: "- [ ] ..."
+    validations:
+      required: true
+  - type: input
+    id: rules
+    attributes:
+      label: Business rules
+      placeholder: BR-01, BR-05
+  - type: textarea
+    id: notes
+    attributes:
+      label: Technical notes
+      description: Endpoints, models, edge cases and tests to write.
