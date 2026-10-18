@@ -10,6 +10,7 @@ This document sets the technical direction for the project. The requirements liv
 | Database | PostgreSQL 17 | Runs in Docker |
 | Frontend | React 19, TypeScript (strict), Vite | Single-page app |
 | Routing and data | React Router, TanStack Query | Server state lives in TanStack Query; no global store |
+| UI components | Mantine | Theme, forms, dates, dropzone, carousel, notifications; see [ADR 0005](adr/0005-mantine-component-library.md) and [ui-design.md](ui-design.md) |
 | Map | Leaflet with react-leaflet, OpenStreetMap tiles | Country shapes from a bundled Natural Earth GeoJSON file |
 | Place lookup | OpenStreetMap Nominatim reverse geocoding | Called from the backend only |
 | Exchange rates | National Bank of Romania daily XML feed | Called from the backend only, cached in the database |
@@ -73,6 +74,7 @@ Deleting a trip cascades to its places, journal entries, photos and expenses (BR
 - The backend is the source of truth for business rules. Forms show the validation errors the API returns, and frontend checks exist only for convenience.
 - Visitor screens never render edit controls, and the API refuses edits anyway.
 - Desktop layout only; no responsive breakpoints are needed.
+- Screens follow the wireframes and theme in [ui-design.md](ui-design.md). Colours and fonts come from the Mantine theme in `src/theme.ts`, never hard-coded.
 
 ## Testing strategy
 
