@@ -21,3 +21,8 @@ class ResizeObserverStub {
   disconnect() {}
 }
 window.ResizeObserver = ResizeObserverStub;
+
+// Tests that mock fetch with vi.stubGlobal() get the real one back afterwards.
+afterEach(() => {
+  vi.unstubAllGlobals();
+});

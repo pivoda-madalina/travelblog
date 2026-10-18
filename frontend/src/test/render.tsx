@@ -9,7 +9,7 @@ import { routes } from '../routes';
 export function renderRoute(path: string) {
   const router = createMemoryRouter(routes, { initialEntries: [path] });
   return render(
-    <AppProviders queryClient={createQueryClient()}>
+    <AppProviders queryClient={createQueryClient()} env="test">
       <RouterProvider router={router} />
     </AppProviders>,
   );

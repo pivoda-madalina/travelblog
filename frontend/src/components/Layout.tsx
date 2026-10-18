@@ -1,5 +1,7 @@
-import { Anchor, AppShell, Button, Container, Group, Title } from '@mantine/core';
+import { Anchor, AppShell, Container, Group, Title } from '@mantine/core';
 import { Link, NavLink, Outlet } from 'react-router';
+
+import { AuthMenu } from '../features/auth/AuthMenu';
 
 const navLinks = [
   { to: '/', label: 'Trips' },
@@ -24,9 +26,7 @@ export function Layout() {
                 ))}
               </Group>
             </Group>
-            <Button component={Link} to="/sign-in" variant="default">
-              Sign in
-            </Button>
+            <AuthMenu />
           </Group>
         </Container>
       </AppShell.Header>
