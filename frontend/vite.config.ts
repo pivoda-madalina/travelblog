@@ -9,9 +9,12 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
+    // Docker Compose turns this on, because file change events from the host do not reach it.
+    watch: { usePolling: process.env.VITE_USE_POLLING === 'true' },
+    // Keep the browser's Host header, so Django sees localhost:5173 for ALLOWED_HOSTS and CSRF.
     proxy: {
-      '/api': backend,
-      '/media': backend,
+      '/api': { target: backend, changeOrigin: false },
+      '/media': { target: backend, changeOrigin: false },
     },
   },
   test: {

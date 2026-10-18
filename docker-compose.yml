@@ -1,0 +1,69 @@
+# Development environment (ADR 0001): `make up`, then open http://localhost:5173.
+# Values come from the local .env when it exists; the defaults below work without one.
+name: travelblog
+
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-travelblog}
+      POSTGRES_USER: ${POSTGRES_USER:-travelblog}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-travelblog}
+    # Host port 5433, because a local PostgreSQL often holds 5432.
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 30s
+      start_period: 30s
+      start_interval: 2s
+
+  backend:
+    build: ./backend
+    environment:
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-}
+      DJANGO_DEBUG: ${DJANGO_DEBUG:-true}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1}
+      POSTGRES_DB: ${POSTGRES_DB:-travelblog}
+      POSTGRES_USER: ${POSTGRES_USER:-travelblog}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-travelblog}
+      POSTGRES_HOST: db
+      POSTGRES_PORT: "5432"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - media:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health/')"
+      interval: 30s
+      start_period: 60s
+      start_interval: 2s
+
+  frontend:
+    build: ./frontend
+    environment:
+      BACKEND_URL: http://backend:8000
+      # File change events from a Windows or macOS host do not reach the container.
+      VITE_USE_POLLING: "true"
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  media:
