@@ -1,10 +1,12 @@
 import datetime
 
 import pytest
+from django.contrib.auth.models import AnonymousUser
 from django.db import IntegrityError
 
 from budget.models import Expense
 from budget.tests.factories import ExpenseFactory
+from core.tests.factories import UserFactory
 from journal.models import JournalEntry, Photo
 from journal.tests.factories import JournalEntryFactory, PhotoFactory
 from places.models import City, Place
@@ -56,3 +58,11 @@ def test_new_trip_is_a_draft_without_budget():
     assert trip.status == Trip.Status.DRAFT
     assert trip.planned_budget is None
     assert str(trip) == "Lisbon"
+
+
+def test_visible_to_hides_drafts_from_visitors_only():
+    draft = TripFactory(status=Trip.Status.DRAFT)
+    published = TripFactory(status=Trip.Status.PUBLISHED)
+
+    assert list(Trip.objects.visible_to(AnonymousUser())) == [published]
+    assert set(Trip.objects.visible_to(UserFactory())) == {draft, published}

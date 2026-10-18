@@ -1,6 +1,14 @@
 from django.db import models
 
 
+class TripQuerySet(models.QuerySet):
+    def visible_to(self, user) -> "TripQuerySet":
+        """The author sees every trip; visitors only see published ones (BR-14)."""
+        if user.is_authenticated:
+            return self
+        return self.filter(status=Trip.Status.PUBLISHED)
+
+
 class Trip(models.Model):
     class Status(models.TextChoices):
         DRAFT = "draft", "Draft"
@@ -14,6 +22,8 @@ class Trip(models.Model):
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.DRAFT)
     planned_budget = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = TripQuerySet.as_manager()
 
     class Meta:
         ordering = ["-start_date"]
