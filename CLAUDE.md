@@ -25,3 +25,5 @@ Portfolio project for a full-stack developer interview. One author, desktop brow
 To be filled in when the project is scaffolded (#1 to #3): `make up`, `make test`, `make lint`, `make seed`.
 
 Backend, from `backend/`: `uv run pytest`, `uv run ruff check .`, `uv run ruff format .`, `uv run python manage.py check`.
+
+Frontend, from `frontend/`: `npm run dev`, `npm test`, `npm run lint`, `npm run typecheck`, `npm run format:check`, `npm run build`.
