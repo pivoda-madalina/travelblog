@@ -1,13 +1,46 @@
-import { Text, Title } from '@mantine/core';
-import { useParams } from 'react-router';
+import { Anchor, Badge, Group, Skeleton, Stack, Text, Title } from '@mantine/core';
+import { Link, useParams } from 'react-router';
 
+import { useTrip } from '../features/trips/api';
+import { formatDateRange } from '../lib/dates';
+
+/** The trip's title, dates and summary. The cover banner and the route, journal, photos and
+ * budget tabs arrive with #10. */
 export function TripPage() {
-  const { tripId } = useParams();
+  const { tripId = '' } = useParams();
+  const { data: trip, isPending, isError } = useTrip(tripId);
+
+  if (isPending) {
+    return (
+      <Stack>
+        <Skeleton height={36} width="50%" />
+        <Skeleton height={20} width="25%" />
+      </Stack>
+    );
+  }
+
+  // Visitors get the same page for a draft as for a missing trip (BR-14).
+  if (isError) {
+    return (
+      <>
+        <Title order={1}>Trip not found</Title>
+        <Text>
+          <Anchor component={Link} to="/">
+            Back to trips
+          </Anchor>
+        </Text>
+      </>
+    );
+  }
 
   return (
-    <>
-      <Title order={1}>Trip {tripId}</Title>
-      <Text c="dimmed">The route, journal, photos and budget tabs will appear here.</Text>
-    </>
+    <Stack gap="xs">
+      <Group gap="sm">
+        <Title order={1}>{trip.title}</Title>
+        {trip.status === 'draft' && <Badge color="orange">Draft</Badge>}
+      </Group>
+      <Text c="dimmed">{formatDateRange(trip.start_date, trip.end_date)}</Text>
+      {trip.summary && <Text ff="heading">{trip.summary}</Text>}
+    </Stack>
   );
 }

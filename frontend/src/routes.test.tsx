@@ -4,7 +4,19 @@ import { mockApi } from './test/mockApi';
 import { renderRoute } from './test/render';
 
 beforeEach(() => {
-  mockApi({ 'GET /auth/me/': { is_author: false, username: null } });
+  mockApi({
+    'GET /auth/me/': { is_author: false, username: null },
+    'GET /trips/12/': {
+      id: 12,
+      title: 'Rome and the Amalfi Coast',
+      start_date: '2026-05-12',
+      end_date: '2026-05-20',
+      summary: '',
+      cover_photo: null,
+      status: 'published',
+      created_at: '2026-04-01T10:00:00Z',
+    },
+  });
 });
 
 test('the trip list is the home page and the header links to every section', async () => {
@@ -17,12 +29,13 @@ test('the trip list is the home page and the header links to every section', asy
 });
 
 test.each([
-  ['/trips/12', 'Trip 12'],
+  ['/trips/12', 'Rome and the Amalfi Coast'],
+  ['/trips/99', 'Trip not found'],
   ['/map', 'World map'],
   ['/sign-in', 'Sign in'],
   ['/no-such-page', 'Page not found'],
-])('%s shows the "%s" page', (path, heading) => {
+])('%s shows the "%s" page', async (path, heading) => {
   renderRoute(path);
 
-  expect(screen.getByRole('heading', { name: heading, level: 1 })).toBeInTheDocument();
+  expect(await screen.findByRole('heading', { name: heading, level: 1 })).toBeInTheDocument();
 });
