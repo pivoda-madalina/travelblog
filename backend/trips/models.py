@@ -73,3 +73,25 @@ class Trip(models.Model):
                     f"({format_date(other.start_date)} to {format_date(other.end_date)})."
                 }
             )
+        if self.pk is not None:
+            self._check_content_within_dates()
+
+    def _check_content_within_dates(self):
+        """BR-09: on edit, the new dates must still hold the trip's places and journal entries."""
+        dates = [
+            *self.places.values_list("visited_on", flat=True),
+            *self.entries.values_list("date", flat=True),
+        ]
+        errors = {}
+        if dates and min(dates) < self.start_date:
+            errors["start_date"] = (
+                f"A place or journal entry is dated {format_date(min(dates))}, before this "
+                "start date. Change its date first."
+            )
+        if dates and max(dates) > self.end_date:
+            errors["end_date"] = (
+                f"A place or journal entry is dated {format_date(max(dates))}, after this "
+                "end date. Change its date first."
+            )
+        if errors:
+            raise ValidationError(errors)

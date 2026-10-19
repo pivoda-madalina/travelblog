@@ -1,10 +1,13 @@
-"""BR-10: trips cannot overlap; a single-day trip is allowed. Dates are inclusive (#28)."""
+"""BR-10: trips cannot overlap; a single-day trip is allowed. Dates are inclusive (#28).
+BR-09, on edit: the trip's dates must still hold its places and journal entries."""
 
 import datetime
 
 import pytest
 from django.core.exceptions import ValidationError
 
+from journal.tests.factories import JournalEntryFactory
+from places.tests.factories import PlaceFactory
 from trips.models import Trip
 from trips.tests.factories import TripFactory
 
@@ -84,3 +87,55 @@ def test_end_date_before_start_date_is_refused():
     assert error.value.message_dict == {
         "end_date": ["The end date cannot be before the start date."]
     }
+
+
+# BR-09: editing a trip's dates must not leave its places or journal entries outside them.
+
+
+def test_br09_new_start_date_cannot_leave_a_place_before_it():
+    trip = TripFactory(start_date=day(5), end_date=day(10))
+    PlaceFactory(trip=trip, visited_on=day(6))
+    trip.start_date = day(7)
+
+    with pytest.raises(ValidationError) as error:
+        trip.clean()
+
+    assert error.value.message_dict == {
+        "start_date": [
+            "A place or journal entry is dated 6 May 2026, before this start date. "
+            "Change its date first."
+        ]
+    }
+
+
+def test_br09_new_end_date_cannot_leave_a_journal_entry_after_it():
+    trip = TripFactory(start_date=day(5), end_date=day(10))
+    JournalEntryFactory(trip=trip, date=day(9))
+    trip.end_date = day(8)
+
+    with pytest.raises(ValidationError) as error:
+        trip.clean()
+
+    assert error.value.message_dict == {
+        "end_date": [
+            "A place or journal entry is dated 9 May 2026, after this end date. "
+            "Change its date first."
+        ]
+    }
+
+
+def test_br09_dates_can_change_while_they_still_hold_the_content():
+    trip = TripFactory(start_date=day(5), end_date=day(10))
+    PlaceFactory(trip=trip, visited_on=day(6))
+    JournalEntryFactory(trip=trip, date=day(8))
+    trip.start_date, trip.end_date = day(6), day(8)
+
+    trip.clean()
+
+
+def test_br09_other_trips_content_is_ignored():
+    trip = TripFactory(start_date=day(5), end_date=day(10))
+    PlaceFactory(trip=TripFactory(start_date=day(20), end_date=day(25)), visited_on=day(20))
+    trip.end_date = day(6)
+
+    trip.clean()
