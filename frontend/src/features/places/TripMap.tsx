@@ -1,11 +1,14 @@
-import 'leaflet/dist/leaflet.css';
-
 import { Box } from '@mantine/core';
-import { CircleMarker, MapContainer, TileLayer, Tooltip, useMapEvents } from 'react-leaflet';
+import { useEffect } from 'react';
+import { CircleMarker, MapContainer, Polyline, Tooltip, useMap, useMapEvents } from 'react-leaflet';
 
+import { OsmTileLayer } from '../../components/OsmTileLayer';
 import type { Place, Point } from './api';
+import { routePositions, type RouteView, routeView } from './route';
 
 const WORLD_CENTER: [number, number] = [30, 10];
+const WORLD_ZOOM = 2;
+const PLACE_ZOOM = 9;
 const TEAL = 'var(--mantine-color-teal-7)';
 
 interface TripMapProps {
@@ -21,25 +24,45 @@ function ClickHandler({ onMapClick }: { onMapClick: (point: Point) => void }) {
   return null;
 }
 
-/** The trip's map with a numbered pin per place. Route lines and zooming to fit arrive with
- * US-06; circle markers avoid Leaflet's image icons, which bundlers break. */
+/** Frames the route whenever its places change, but not on other renders, so the map keeps
+ * still while the author picks a point. */
+function FitRoute({ view }: { view: RouteView }) {
+  const map = useMap();
+  // A string, so the effect runs when the route moves rather than on every new `view` object.
+  const viewKey = JSON.stringify(view);
+
+  useEffect(() => {
+    const current = JSON.parse(viewKey) as RouteView;
+    if (current.kind === 'bounds') {
+      map.fitBounds(current.bounds, { padding: [40, 40] });
+    } else if (current.kind === 'place') {
+      map.setView(current.center, PLACE_ZOOM);
+    } else {
+      map.setView(WORLD_CENTER, WORLD_ZOOM);
+    }
+  }, [map, viewKey]);
+
+  return null;
+}
+
+/** The trip's route map: numbered pins joined by straight teal lines in the author's order,
+ * zoomed to fit (US-06). Circle markers avoid Leaflet's image icons, which bundlers break. */
 export function TripMap({ places, pending, onMapClick }: TripMapProps) {
-  const last = places.at(-1);
-  const center: [number, number] = last
-    ? [Number(last.city.latitude), Number(last.city.longitude)]
-    : WORLD_CENTER;
+  const positions = routePositions(places);
 
   return (
     <Box h={480} style={{ borderRadius: 'var(--mantine-radius-md)', overflow: 'hidden' }}>
       <MapContainer
-        center={center}
-        zoom={last ? 6 : 2}
+        center={WORLD_CENTER}
+        zoom={WORLD_ZOOM}
         style={{ height: '100%', cursor: onMapClick ? 'crosshair' : undefined }}
       >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+        <OsmTileLayer />
+        <FitRoute view={routeView(positions)} />
+        {/* A single place has no line, only its pin. */}
+        {positions.length > 1 && (
+          <Polyline positions={positions} pathOptions={{ color: TEAL, weight: 3 }} />
+        )}
         {places.map((place, index) => (
           <CircleMarker
             key={place.id}
