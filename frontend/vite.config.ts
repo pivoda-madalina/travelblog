@@ -22,5 +22,8 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
     css: false,
+    // Form tests type and click through Mantine pickers, which can pass 5 s when every file
+    // runs in parallel on a busy machine.
+    testTimeout: 15_000,
   },
 });
