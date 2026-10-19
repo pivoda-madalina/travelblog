@@ -1,5 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 
+import { notifications } from '@mantine/notifications';
+
 // jsdom lacks these browser APIs, and Mantine needs them (ADR 0005).
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -30,4 +32,9 @@ Object.defineProperty(document, 'fonts', {
 // Tests that mock fetch with vi.stubGlobal() get the real one back afterwards.
 afterEach(() => {
   vi.unstubAllGlobals();
+});
+
+// Notifications live in a store shared by every test in a file, so each test starts without any.
+afterEach(() => {
+  notifications.clean();
 });
