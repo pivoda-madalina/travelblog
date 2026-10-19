@@ -5,6 +5,7 @@ from django.urls import include, path
 urlpatterns = [
     path("api/", include("core.urls")),
     path("api/", include("trips.urls")),
+    path("api/", include("places.urls")),
 ]
 
 # In development Django serves uploaded photos; the Vite proxy forwards /media to it.
