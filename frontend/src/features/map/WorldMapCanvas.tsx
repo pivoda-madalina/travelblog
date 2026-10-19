@@ -1,7 +1,7 @@
-import 'leaflet/dist/leaflet.css';
-
 import type { FeatureCollection, Geometry } from 'geojson';
-import { CircleMarker, GeoJSON, MapContainer, Popup, TileLayer } from 'react-leaflet';
+import { CircleMarker, GeoJSON, MapContainer, Popup } from 'react-leaflet';
+
+import { OsmTileLayer } from '../../components/OsmTileLayer';
 
 import type { MapCity } from './api';
 import { CityVisits } from './CityVisits';
@@ -31,10 +31,7 @@ export function WorldMapCanvas({ countries, cities }: WorldMapCanvasProps) {
 
   return (
     <MapContainer center={[30, 10]} zoom={2} minZoom={2} worldCopyJump style={{ height: '100%' }}>
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+      <OsmTileLayer />
       {/* GeoJSON does not redraw when its data changes, so the key forces a new layer. */}
       <GeoJSON
         key={countries.join(',')}
