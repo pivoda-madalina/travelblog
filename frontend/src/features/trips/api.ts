@@ -94,3 +94,15 @@ export function useDeleteTrip() {
     },
   });
 }
+
+/** The planned budget alone, as JSON so it can be cleared with null (US-10). */
+export function useSetPlannedBudget(id: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (planned_budget: string | null) =>
+      api.patch<Trip>(`/trips/${id}/`, { planned_budget }),
+    onSuccess: (trip) => {
+      queryClient.setQueryData(tripKeys.detail(trip.id), trip);
+    },
+  });
+}
