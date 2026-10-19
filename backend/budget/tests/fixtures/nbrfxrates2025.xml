@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DataSet xmlns="http://www.bnr.ro/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.bnr.ro/xsd nbrfxrates.xsd"><Header><Publisher>National Bank of Romania</Publisher><PublishingDate>2025-12-31</PublishingDate><MessageType>DR</MessageType></Header><Body><Subject>Reference rates</Subject><OrigCurrency>RON</OrigCurrency>
+<Cube date="2025-12-15">
+  <Rate currency="EUR">5.0914</Rate>
+  <Rate currency="HUF" multiplier="100">1.3218</Rate>
+  <Rate currency="JPY" multiplier="100">2.7951</Rate>
+  <Rate currency="USD">4.3359</Rate>
+</Cube>
+<Cube date="2025-12-16">
+  <Rate currency="EUR">5.0920</Rate>
+  <Rate currency="HUF" multiplier="100">1.3237</Rate>
+  <Rate currency="JPY" multiplier="100">2.7965</Rate>
+  <Rate currency="USD">4.3312</Rate>
+</Cube>
+<Cube date="2025-12-17">
+  <Rate currency="EUR">5.0923</Rate>
+  <Rate currency="HUF" multiplier="100">1.3170</Rate>
+  <Rate currency="JPY" multiplier="100">2.7944</Rate>
+  <Rate currency="USD">4.3442</Rate>
+</Cube>
+<Cube date="2025-12-18">
+  <Rate currency="EUR">5.0911</Rate>
+  <Rate currency="HUF" multiplier="100">1.3101</Rate>
+  <Rate currency="JPY" multiplier="100">2.7848</Rate>
+  <Rate currency="USD">4.3417</Rate>
+</Cube>
+<Cube date="2025-12-19">
+  <Rate currency="EUR">5.0896</Rate>
+  <Rate currency="HUF" multiplier="100">1.3159</Rate>
+  <Rate currency="JPY" multiplier="100">2.7612</Rate>
+  <Rate currency="USD">4.3449</Rate>
+</Cube>
+<Cube date="2025-12-22">
+  <Rate currency="EUR">5.0881</Rate>
+  <Rate currency="HUF" multiplier="100">1.3141</Rate>
+  <Rate currency="JPY" multiplier="100">2.7549</Rate>
+  <Rate currency="USD">4.3364</Rate>
+</Cube>
+<Cube date="2025-12-23">
+  <Rate currency="EUR">5.0908</Rate>
+  <Rate currency="HUF" multiplier="100">1.3010</Rate>
+  <Rate currency="JPY" multiplier="100">2.7682</Rate>
+  <Rate currency="USD">4.3146</Rate>
+</Cube>
+<Cube date="2025-12-24">
+  <Rate currency="EUR">5.0890</Rate>
+  <Rate currency="HUF" multiplier="100">1.3071</Rate>
+  <Rate currency="JPY" multiplier="100">2.7676</Rate>
+  <Rate currency="USD">4.3140</Rate>
+</Cube>
+<Cube date="2025-12-29">
+  <Rate currency="EUR">5.0920</Rate>
+  <Rate currency="HUF" multiplier="100">1.3135</Rate>
+  <Rate currency="JPY" multiplier="100">2.7666</Rate>
+  <Rate currency="USD">4.3235</Rate>
+</Cube>
+<Cube date="2025-12-30">
+  <Rate currency="EUR">5.0963</Rate>
+  <Rate currency="HUF" multiplier="100">1.3195</Rate>
+  <Rate currency="JPY" multiplier="100">2.7775</Rate>
+  <Rate currency="USD">4.3286</Rate>
+</Cube>
+<Cube date="2025-12-31">
+  <Rate currency="EUR">5.0985</Rate>
+  <Rate currency="HUF" multiplier="100">1.3250</Rate>
+  <Rate currency="JPY" multiplier="100">2.7720</Rate>
+  <Rate currency="USD">4.3417</Rate>
+</Cube>
+</Body></DataSet>

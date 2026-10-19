@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DataSet xmlns="https://www.bnr.ro/xsd" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://curs.bnr.ro/xsd/nbrfxrates.xsd"><Header><Publisher>National Bank of Romania</Publisher><PublishingDate>2026-10-19</PublishingDate><MessageType>DR</MessageType></Header><Body><Subject>Reference rates</Subject><OrigCurrency>RON</OrigCurrency>
+<Cube date="2026-10-16">
+  <Rate currency="EUR">5.3368</Rate>
+  <Rate currency="HUF" multiplier="100">1.4695</Rate>
+  <Rate currency="JPY" multiplier="100">3.0022</Rate>
+  <Rate currency="USD">4.7430</Rate>
+</Cube>
+<Cube date="2026-10-15">
+  <Rate currency="EUR">5.3370</Rate>
+  <Rate currency="HUF" multiplier="100">1.4678</Rate>
+  <Rate currency="JPY" multiplier="100">3.0165</Rate>
+  <Rate currency="USD">4.7571</Rate>
+</Cube>
+<Cube date="2026-10-14">
+  <Rate currency="EUR">5.3393</Rate>
+  <Rate currency="HUF" multiplier="100">1.4684</Rate>
+  <Rate currency="JPY" multiplier="100">3.0109</Rate>
+  <Rate currency="USD">4.7706</Rate>
+</Cube>
+<Cube date="2026-10-13">
+  <Rate currency="EUR">5.3370</Rate>
+  <Rate currency="HUF" multiplier="100">1.4653</Rate>
+  <Rate currency="JPY" multiplier="100">3.0206</Rate>
+  <Rate currency="USD">4.7748</Rate>
+</Cube>
+<Cube date="2026-10-12">
+  <Rate currency="EUR">5.3373</Rate>
+  <Rate currency="HUF" multiplier="100">1.4611</Rate>
+  <Rate currency="JPY" multiplier="100">3.0089</Rate>
+  <Rate currency="USD">4.7714</Rate>
+</Cube>
+<Cube date="2026-10-09">
+  <Rate currency="EUR">5.3414</Rate>
+  <Rate currency="HUF" multiplier="100">1.4642</Rate>
+  <Rate currency="JPY" multiplier="100">3.0085</Rate>
+  <Rate currency="USD">4.7612</Rate>
+</Cube>
+<Cube date="2026-10-08">
+  <Rate currency="EUR">5.3470</Rate>
+  <Rate currency="HUF" multiplier="100">1.4577</Rate>
+  <Rate currency="JPY" multiplier="100">3.0217</Rate>
+  <Rate currency="USD">4.7814</Rate>
+</Cube>
+<Cube date="2026-10-07">
+  <Rate currency="EUR">5.3501</Rate>
+  <Rate currency="HUF" multiplier="100">1.4587</Rate>
+  <Rate currency="JPY" multiplier="100">3.0200</Rate>
+  <Rate currency="USD">4.7801</Rate>
+</Cube>
+<Cube date="2026-10-06">
+  <Rate currency="EUR">5.3527</Rate>
+  <Rate currency="HUF" multiplier="100">1.4650</Rate>
+  <Rate currency="JPY" multiplier="100">3.0096</Rate>
+  <Rate currency="USD">4.7616</Rate>
+</Cube>
+<Cube date="2026-10-05">
+  <Rate currency="EUR">5.3306</Rate>
+  <Rate currency="HUF" multiplier="100">1.4485</Rate>
+  <Rate currency="JPY" multiplier="100">3.0119</Rate>
+  <Rate currency="USD">4.7569</Rate>
+</Cube>
+</Body></DataSet>

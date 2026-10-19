@@ -70,3 +70,18 @@ class ExchangeRate(models.Model):
 
     def __str__(self) -> str:
         return f"{self.currency} {self.date}: {self.rate}"
+
+
+class ExchangeRateFetch(models.Model):
+    """A range of dates whose NBR rates are in the cache, so each date is fetched once. Days in
+    the range without a rate (weekends, holidays) are known to have none (BR-03)."""
+
+    start_date = models.DateField()
+    end_date = models.DateField()
+    fetched_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-fetched_at"]
+
+    def __str__(self) -> str:
+        return f"NBR rates {self.start_date} to {self.end_date}"
