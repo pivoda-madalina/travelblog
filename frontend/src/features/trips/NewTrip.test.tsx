@@ -23,6 +23,7 @@ const savedTrip = {
   status: 'draft',
   planned_budget: null,
   created_at: '2026-10-18T10:00:00Z',
+  countries: [],
 };
 
 function fileInput(): HTMLInputElement {
