@@ -1,4 +1,23 @@
+from django.core.exceptions import ValidationError
 from django.db import models
+
+from trips.models import format_date
+
+
+class CityQuerySet(models.QuerySet):
+    def find_or_create(self, *, name, country_code, country_name, latitude, longitude) -> "City":
+        """The city with this name in this country, created the first time it is added (ADR 0004,
+        BR-12). The name matches regardless of case; an existing city keeps its coordinates."""
+        city = self.filter(name__iexact=name, country_code=country_code).first()
+        if city is not None:
+            return city
+        return self.create(
+            name=name,
+            country_code=country_code,
+            country_name=country_name,
+            latitude=latitude,
+            longitude=longitude,
+        )
 
 
 class City(models.Model):
@@ -9,6 +28,8 @@ class City(models.Model):
     country_name = models.CharField(max_length=200)
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
+
+    objects = CityQuerySet.as_manager()
 
     class Meta:
         verbose_name_plural = "cities"
@@ -37,3 +58,16 @@ class Place(models.Model):
 
     def __str__(self) -> str:
         return f"{self.city.name} on {self.visited_on}"
+
+    def clean(self):
+        # BR-09: a place is dated within its trip.
+        if self.trip_id is None or self.visited_on is None:
+            return
+        trip = self.trip
+        if not trip.start_date <= self.visited_on <= trip.end_date:
+            raise ValidationError(
+                {
+                    "visited_on": "The visit date must be within the trip, "
+                    f"{format_date(trip.start_date)} to {format_date(trip.end_date)}."
+                }
+            )

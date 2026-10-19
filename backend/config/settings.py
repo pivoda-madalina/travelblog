@@ -105,3 +105,9 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework.authentication.SessionAuthentication"],
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticatedOrReadOnly"],
 }
+
+# Reverse geocoding for places (US-04). Nominatim's usage policy asks for a User-Agent that
+# identifies the application, ideally with a contact address.
+NOMINATIM_URL = os.environ.get("NOMINATIM_URL", "https://nominatim.openstreetmap.org")
+NOMINATIM_USER_AGENT = os.environ.get("NOMINATIM_USER_AGENT", "travelblog/0.1 (portfolio project)")
+NOMINATIM_TIMEOUT_SECONDS = 5

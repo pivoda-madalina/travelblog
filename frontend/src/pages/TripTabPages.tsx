@@ -3,13 +3,11 @@ import { Navigate } from 'react-router';
 
 import { useCurrentUser } from '../features/auth/api';
 
+export { RouteTab } from '../features/places/RouteTab';
+
 /** Placeholders for the trip page tabs until their stories land. */
 function ComingSoon({ story }: { story: string }) {
   return <Text c="gray">Coming soon ({story}).</Text>;
-}
-
-export function RouteTab() {
-  return <ComingSoon story="US-06" />;
 }
 
 export function JournalTab() {
