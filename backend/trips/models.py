@@ -1,6 +1,8 @@
 import datetime
+from decimal import Decimal
 
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 
 from core.validators import validate_jpeg
@@ -35,7 +37,14 @@ class Trip(models.Model):
     summary = models.TextField(blank=True)
     cover_photo = models.ImageField(upload_to="covers/", blank=True, validators=[validate_jpeg])
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.DRAFT)
-    planned_budget = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    # A single total in RON (BR-01), zero or more, or empty when not planned (US-10).
+    planned_budget = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(Decimal("0"))],
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     objects = TripQuerySet.as_manager()
@@ -47,6 +56,10 @@ class Trip(models.Model):
             models.CheckConstraint(
                 condition=models.Q(end_date__gte=models.F("start_date")),
                 name="trip_end_date_not_before_start_date",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(planned_budget__gte=0) | models.Q(planned_budget__isnull=True),
+                name="trip_planned_budget_not_negative",
             ),
         ]
 

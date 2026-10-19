@@ -1,8 +1,6 @@
 import { Text } from '@mantine/core';
-import { Navigate } from 'react-router';
 
-import { useCurrentUser } from '../features/auth/api';
-
+export { BudgetTab } from '../features/budget/BudgetTab';
 export { RouteTab } from '../features/places/RouteTab';
 
 /** Placeholders for the trip page tabs until their stories land. */
@@ -16,17 +14,4 @@ export function JournalTab() {
 
 export function PhotosTab() {
   return <ComingSoon story="US-08" />;
-}
-
-/** Visitors who open the budget URL are returned to the Route tab (BR-14). */
-export function BudgetTab() {
-  const { data: user, isPending } = useCurrentUser();
-
-  if (isPending) {
-    return null;
-  }
-  if (!user?.is_author) {
-    return <Navigate to=".." relative="path" replace />;
-  }
-  return <ComingSoon story="US-10" />;
 }

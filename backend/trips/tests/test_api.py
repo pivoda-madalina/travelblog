@@ -310,3 +310,37 @@ def test_br14_author_sees_drafts_in_the_list(author):
         (draft.pk, "draft"),
         (published.pk, "published"),
     }
+
+
+@pytest.mark.parametrize(
+    ("value", "saved"), [("5000.00", Decimal("5000.00")), ("0", Decimal("0")), (None, None)]
+)
+def test_author_sets_a_planned_budget_of_zero_or_more_or_none(author, value, saved):
+    trip = TripFactory(planned_budget=Decimal("100.00"))
+
+    response = author.patch(detail(trip), {"planned_budget": value}, format="json")
+
+    assert response.status_code == 200
+    trip.refresh_from_db()
+    assert trip.planned_budget == saved
+
+
+def test_planned_budget_cannot_be_negative(author):
+    trip = TripFactory()
+
+    response = author.patch(detail(trip), {"planned_budget": "-1.00"}, format="json")
+
+    assert response.status_code == 400
+    assert response.json() == {
+        "planned_budget": ["Ensure this value is greater than or equal to 0."]
+    }
+
+
+def test_br14_visitor_cannot_set_a_planned_budget(visitor):
+    trip = TripFactory()
+
+    response = visitor.patch(detail(trip), {"planned_budget": "10.00"}, format="json")
+
+    assert response.status_code == 403
+    trip.refresh_from_db()
+    assert trip.planned_budget is None
