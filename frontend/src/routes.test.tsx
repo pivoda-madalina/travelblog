@@ -15,6 +15,7 @@ beforeEach(() => {
       cover_photo: null,
       status: 'published',
       created_at: '2026-04-01T10:00:00Z',
+      countries: [],
     },
   });
 });

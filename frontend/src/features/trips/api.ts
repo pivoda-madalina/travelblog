@@ -4,7 +4,8 @@ import { api } from '../../api/client';
 
 export type TripStatus = 'draft' | 'published';
 
-/** `GET /api/trips/{id}/`. `planned_budget` is only sent to the author (BR-14). */
+/** `GET /api/trips/{id}/`. `planned_budget` is only sent to the author (BR-14). `countries`
+ * come from the trip's places, in route order (US-03). */
 export interface Trip {
   id: number;
   title: string;
@@ -15,6 +16,7 @@ export interface Trip {
   status: TripStatus;
   planned_budget?: string | null;
   created_at: string;
+  countries: string[];
 }
 
 export interface TripInput {
@@ -30,6 +32,14 @@ export const tripKeys = {
   all: ['trips'] as const,
   detail: (id: string | number) => ['trips', String(id)] as const,
 };
+
+/** Newest first; visitors get published trips only (BR-14). */
+export function useTrips() {
+  return useQuery({
+    queryKey: tripKeys.all,
+    queryFn: () => api.get<Trip[]>('/trips/'),
+  });
+}
 
 export function useTrip(id: string) {
   return useQuery({
