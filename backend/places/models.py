@@ -1,7 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
 
-from trips.models import format_date
+from trips.models import Trip, format_date
 
 
 class CityQuerySet(models.QuerySet):
@@ -44,6 +45,13 @@ class City(models.Model):
         return f"{self.name}, {self.country_name}"
 
 
+class PlaceQuerySet(models.QuerySet):
+    def on_world_map(self) -> "PlaceQuerySet":
+        """Places of published trips visited today or earlier: drafts and planned visits stay
+        off the public map (BR-13)."""
+        return self.filter(trip__status=Trip.Status.PUBLISHED, visited_on__lte=timezone.localdate())
+
+
 class Place(models.Model):
     """One stop on a trip's route."""
 
@@ -52,6 +60,8 @@ class Place(models.Model):
     city = models.ForeignKey(City, on_delete=models.PROTECT, related_name="places")
     visited_on = models.DateField()
     position = models.PositiveIntegerField(default=0)
+
+    objects = PlaceQuerySet.as_manager()
 
     class Meta:
         ordering = ["trip", "position"]

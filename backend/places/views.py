@@ -6,7 +6,12 @@ from rest_framework.response import Response
 from core.permissions import IsAuthor, TripVisibilityMixin
 from places.geocoding import GeocodingError, reverse_geocode
 from places.models import Place
-from places.serializers import CoordinatesSerializer, PlaceSerializer, RouteOrderSerializer
+from places.serializers import (
+    CitySerializer,
+    CoordinatesSerializer,
+    PlaceSerializer,
+    RouteOrderSerializer,
+)
 
 
 class PlaceViewSet(
@@ -64,3 +69,32 @@ def reverse_geocode_view(request):
             "country_name": location.country_name,
         }
     )
+
+
+@api_view(["GET"])
+def world_map(request):
+    """`GET /api/map/`: one pin per visited city with the trips that visited it, and the visited
+    country codes (US-05, BR-12). Only places of published trips dated today or earlier count,
+    for the author as well, since the map is the public view (BR-13)."""
+    places = (
+        Place.objects.on_world_map()
+        .select_related("city", "trip")
+        .order_by("city__name", "city_id", "visited_on")
+    )
+    cities: dict[int, dict] = {}
+    for place in places:
+        city = cities.setdefault(
+            place.city_id,
+            {**CitySerializer(place.city).data, "visits": {}},
+        )
+        # A trip that stopped in the city twice is listed once, with its first visit.
+        city["visits"].setdefault(
+            place.trip_id,
+            {"trip": place.trip_id, "title": place.trip.title, "visited_on": place.visited_on},
+        )
+    result = []
+    for city in cities.values():
+        visits = sorted(city.pop("visits").values(), key=lambda v: v["visited_on"], reverse=True)
+        result.append({**city, "visits": visits})
+    countries = sorted({city["country_code"] for city in result})
+    return Response({"countries": countries, "cities": result})
