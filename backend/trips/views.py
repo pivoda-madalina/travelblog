@@ -10,10 +10,12 @@ class TripViewSet(
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
-    """Trips, newest first. Visitors see published trips only (BR-14). Editing and deleting
-    arrive with #9."""
+    """Trips, newest first. Visitors see published trips only (BR-14). Deleting a trip deletes
+    everything that belongs to it, files included (BR-11)."""
 
     queryset = Trip.objects.all()
     serializer_class = TripSerializer
