@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 
 import pytest
 from django.contrib.auth.models import AnonymousUser
@@ -66,3 +67,8 @@ def test_visible_to_hides_drafts_from_visitors_only():
 
     assert list(Trip.objects.visible_to(AnonymousUser())) == [published]
     assert set(Trip.objects.visible_to(UserFactory())) == {draft, published}
+
+
+def test_database_refuses_a_negative_planned_budget():
+    with pytest.raises(IntegrityError):
+        TripFactory(planned_budget=Decimal("-0.01"))
