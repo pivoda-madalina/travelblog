@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DataSet xmlns="https://www.bnr.ro/xsd" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://curs.bnr.ro/xsd/nbrfxrates.xsd"><Header><Publisher>National Bank of Romania</Publisher><PublishingDate>2026-10-19</PublishingDate><MessageType>DR</MessageType></Header><Body><Subject>Reference rates</Subject><OrigCurrency>RON</OrigCurrency>
+<Cube date="2026-01-05">
+  <Rate currency="EUR">5.0905</Rate>
+  <Rate currency="HUF" multiplier="100">1.3247</Rate>
+  <Rate currency="JPY" multiplier="100">2.7816</Rate>
+  <Rate currency="USD">4.3557</Rate>
+</Cube>
+<Cube date="2026-01-08">
+  <Rate currency="EUR">5.0871</Rate>
+  <Rate currency="HUF" multiplier="100">1.3208</Rate>
+  <Rate currency="JPY" multiplier="100">2.7798</Rate>
+  <Rate currency="USD">4.3558</Rate>
+</Cube>
+<Cube date="2026-01-09">
+  <Rate currency="EUR">5.0887</Rate>
+  <Rate currency="HUF" multiplier="100">1.3196</Rate>
+  <Rate currency="JPY" multiplier="100">2.7715</Rate>
+  <Rate currency="USD">4.3702</Rate>
+</Cube>
+<Cube date="2026-01-12">
+  <Rate currency="EUR">5.0896</Rate>
+  <Rate currency="HUF" multiplier="100">1.3168</Rate>
+  <Rate currency="JPY" multiplier="100">2.7591</Rate>
+  <Rate currency="USD">4.3564</Rate>
+</Cube>
+<Cube date="2026-01-13">
+  <Rate currency="EUR">5.0896</Rate>
+  <Rate currency="HUF" multiplier="100">1.3190</Rate>
+  <Rate currency="JPY" multiplier="100">2.7465</Rate>
+  <Rate currency="USD">4.3626</Rate>
+</Cube>
+<Cube date="2026-01-14">
+  <Rate currency="EUR">5.0897</Rate>
+  <Rate currency="HUF" multiplier="100">1.3190</Rate>
+  <Rate currency="JPY" multiplier="100">2.7519</Rate>
+  <Rate currency="USD">4.3658</Rate>
+</Cube>
+<Cube date="2026-01-15">
+  <Rate currency="EUR">5.0891</Rate>
+  <Rate currency="HUF" multiplier="100">1.3193</Rate>
+  <Rate currency="JPY" multiplier="100">2.7600</Rate>
+  <Rate currency="USD">4.3740</Rate>
+</Cube>
+<Cube date="2026-01-16">
+  <Rate currency="EUR">5.0894</Rate>
+  <Rate currency="HUF" multiplier="100">1.3212</Rate>
+  <Rate currency="JPY" multiplier="100">2.7709</Rate>
+  <Rate currency="USD">4.3816</Rate>
+</Cube>
+<Cube date="2026-01-19">
+  <Rate currency="EUR">5.0921</Rate>
+  <Rate currency="HUF" multiplier="100">1.3189</Rate>
+  <Rate currency="JPY" multiplier="100">2.7746</Rate>
+  <Rate currency="USD">4.3799</Rate>
+</Cube>
+<Cube date="2026-01-20">
+  <Rate currency="EUR">5.0929</Rate>
+  <Rate currency="HUF" multiplier="100">1.3196</Rate>
+  <Rate currency="JPY" multiplier="100">2.7520</Rate>
+  <Rate currency="USD">4.3442</Rate>
+</Cube>
+<Cube date="2026-01-21">
+  <Rate currency="EUR">5.0961</Rate>
+  <Rate currency="HUF" multiplier="100">1.3225</Rate>
+  <Rate currency="JPY" multiplier="100">2.7549</Rate>
+  <Rate currency="USD">4.3532</Rate>
+</Cube>
+<Cube date="2026-01-22">
+  <Rate currency="EUR">5.0936</Rate>
+  <Rate currency="HUF" multiplier="100">1.3271</Rate>
+  <Rate currency="JPY" multiplier="100">2.7454</Rate>
+  <Rate currency="USD">4.3572</Rate>
+</Cube>
+<Cube date="2026-01-23">
+  <Rate currency="EUR">5.0943</Rate>
+  <Rate currency="HUF" multiplier="100">1.3318</Rate>
+  <Rate currency="JPY" multiplier="100">2.7441</Rate>
+  <Rate currency="USD">4.3411</Rate>
+</Cube>
+<Cube date="2026-01-26">
+  <Rate currency="EUR">5.0960</Rate>
+  <Rate currency="HUF" multiplier="100">1.3331</Rate>
+  <Rate currency="JPY" multiplier="100">2.7978</Rate>
+  <Rate currency="USD">4.2972</Rate>
+</Cube>
+<Cube date="2026-01-27">
+  <Rate currency="EUR">5.0959</Rate>
+  <Rate currency="HUF" multiplier="100">1.3349</Rate>
+  <Rate currency="JPY" multiplier="100">2.7881</Rate>
+  <Rate currency="USD">4.2871</Rate>
+</Cube>
+<Cube date="2026-01-28">
+  <Rate currency="EUR">5.0960</Rate>
+  <Rate currency="HUF" multiplier="100">1.3394</Rate>
+  <Rate currency="JPY" multiplier="100">2.7865</Rate>
+  <Rate currency="USD">4.2490</Rate>
+</Cube>
+<Cube date="2026-01-29">
+  <Rate currency="EUR">5.0957</Rate>
+  <Rate currency="HUF" multiplier="100">1.3350</Rate>
+  <Rate currency="JPY" multiplier="100">2.7811</Rate>
+  <Rate currency="USD">4.2651</Rate>
+</Cube>
+<Cube date="2026-01-30">
+  <Rate currency="EUR">5.0961</Rate>
+  <Rate currency="HUF" multiplier="100">1.3352</Rate>
+  <Rate currency="JPY" multiplier="100">2.7727</Rate>
+  <Rate currency="USD">4.2742</Rate>
+</Cube>
+<Cube date="2026-02-02">
+  <Rate currency="EUR">5.0959</Rate>
+  <Rate currency="HUF" multiplier="100">1.3380</Rate>
+  <Rate currency="JPY" multiplier="100">2.7749</Rate>
+  <Rate currency="USD">4.2958</Rate>
+</Cube>
+<Cube date="2026-02-03">
+  <Rate currency="EUR">5.0950</Rate>
+  <Rate currency="HUF" multiplier="100">1.3385</Rate>
+  <Rate currency="JPY" multiplier="100">2.7709</Rate>
+  <Rate currency="USD">4.3215</Rate>
+</Cube>
+<Cube date="2026-02-04">
+  <Rate currency="EUR">5.0943</Rate>
+  <Rate currency="HUF" multiplier="100">1.3375</Rate>
+  <Rate currency="JPY" multiplier="100">2.7518</Rate>
+  <Rate currency="USD">4.3130</Rate>
+</Cube>
+<Cube date="2026-02-05">
+  <Rate currency="EUR">5.0945</Rate>
+  <Rate currency="HUF" multiplier="100">1.3430</Rate>
+  <Rate currency="JPY" multiplier="100">2.7491</Rate>
+  <Rate currency="USD">4.3209</Rate>
+</Cube>
+<Cube date="2026-02-06">
+  <Rate currency="EUR">5.0923</Rate>
+  <Rate currency="HUF" multiplier="100">1.3454</Rate>
+  <Rate currency="JPY" multiplier="100">2.7521</Rate>
+  <Rate currency="USD">4.3190</Rate>
+</Cube>
+<Cube date="2026-02-09">
+  <Rate currency="EUR">5.0934</Rate>
+  <Rate currency="HUF" multiplier="100">1.3485</Rate>
+  <Rate currency="JPY" multiplier="100">2.7405</Rate>
+  <Rate currency="USD">4.2955</Rate>
+</Cube>
+<Cube date="2026-02-10">
+  <Rate currency="EUR">5.0910</Rate>
+  <Rate currency="HUF" multiplier="100">1.3479</Rate>
+  <Rate currency="JPY" multiplier="100">2.7555</Rate>
+  <Rate currency="USD">4.2740</Rate>
+</Cube>
+<Cube date="2026-02-11">
+  <Rate currency="EUR">5.0914</Rate>
+  <Rate currency="HUF" multiplier="100">1.3444</Rate>
+  <Rate currency="JPY" multiplier="100">2.7862</Rate>
+  <Rate currency="USD">4.2701</Rate>
+</Cube>
+<Cube date="2026-02-12">
+  <Rate currency="EUR">5.0934</Rate>
+  <Rate currency="HUF" multiplier="100">1.3399</Rate>
+  <Rate currency="JPY" multiplier="100">2.8019</Rate>
+  <Rate currency="USD">4.2881</Rate>
+</Cube>
+<Cube date="2026-02-13">
+  <Rate currency="EUR">5.0943</Rate>
+  <Rate currency="HUF" multiplier="100">1.3439</Rate>
+  <Rate currency="JPY" multiplier="100">2.7995</Rate>
+  <Rate currency="USD">4.2964</Rate>
+</Cube>
+<Cube date="2026-02-16">
+  <Rate currency="EUR">5.0953</Rate>
+  <Rate currency="HUF" multiplier="100">1.3492</Rate>
+  <Rate currency="JPY" multiplier="100">2.7960</Rate>
+  <Rate currency="USD">4.2940</Rate>
+</Cube>
+<Cube date="2026-02-17">
+  <Rate currency="EUR">5.0965</Rate>
+  <Rate currency="HUF" multiplier="100">1.3493</Rate>
+  <Rate currency="JPY" multiplier="100">2.8119</Rate>
+  <Rate currency="USD">4.3037</Rate>
+</Cube>
+<Cube date="2026-02-18">
+  <Rate currency="EUR">5.0941</Rate>
+  <Rate currency="HUF" multiplier="100">1.3487</Rate>
+  <Rate currency="JPY" multiplier="100">2.7987</Rate>
+  <Rate currency="USD">4.3046</Rate>
+</Cube>
+<Cube date="2026-02-19">
+  <Rate currency="EUR">5.0956</Rate>
+  <Rate currency="HUF" multiplier="100">1.3429</Rate>
+  <Rate currency="JPY" multiplier="100">2.7933</Rate>
+  <Rate currency="USD">4.3216</Rate>
+</Cube>
+<Cube date="2026-02-20">
+  <Rate currency="EUR">5.0974</Rate>
+  <Rate currency="HUF" multiplier="100">1.3441</Rate>
+  <Rate currency="JPY" multiplier="100">2.7895</Rate>
+  <Rate currency="USD">4.3327</Rate>
+</Cube>
+<Cube date="2026-02-23">
+  <Rate currency="EUR">5.0968</Rate>
+  <Rate currency="HUF" multiplier="100">1.3420</Rate>
+  <Rate currency="JPY" multiplier="100">2.7901</Rate>
+  <Rate currency="USD">4.3195</Rate>
+</Cube>
+<Cube date="2026-02-24">
+  <Rate currency="EUR">5.0954</Rate>
+  <Rate currency="HUF" multiplier="100">1.3449</Rate>
+  <Rate currency="JPY" multiplier="100">2.7743</Rate>
+  <Rate currency="USD">4.3231</Rate>
+</Cube>
+<Cube date="2026-02-25">
+  <Rate currency="EUR">5.0953</Rate>
+  <Rate currency="HUF" multiplier="100">1.3549</Rate>
+  <Rate currency="JPY" multiplier="100">2.7588</Rate>
+  <Rate currency="USD">4.3250</Rate>
+</Cube>
+<Cube date="2026-02-26">
+  <Rate currency="EUR">5.0955</Rate>
+  <Rate currency="HUF" multiplier="100">1.3573</Rate>
+  <Rate currency="JPY" multiplier="100">2.7694</Rate>
+  <Rate currency="USD">4.3204</Rate>
+</Cube>
+<Cube date="2026-02-27">
+  <Rate currency="EUR">5.0953</Rate>
+  <Rate currency="HUF" multiplier="100">1.3563</Rate>
+  <Rate currency="JPY" multiplier="100">2.7684</Rate>
+  <Rate currency="USD">4.3179</Rate>
+</Cube>
+<Cube date="2026-03-02">
+  <Rate currency="EUR">5.0972</Rate>
+  <Rate currency="HUF" multiplier="100">1.3459</Rate>
+  <Rate currency="JPY" multiplier="100">2.7674</Rate>
+  <Rate currency="USD">4.3430</Rate>
+</Cube>
+<Cube date="2026-03-03">
+  <Rate currency="EUR">5.0981</Rate>
+  <Rate currency="HUF" multiplier="100">1.3174</Rate>
+  <Rate currency="JPY" multiplier="100">2.7855</Rate>
+  <Rate currency="USD">4.3940</Rate>
+</Cube>
+<Cube date="2026-03-04">
+  <Rate currency="EUR">5.0959</Rate>
+  <Rate currency="HUF" multiplier="100">1.3251</Rate>
+  <Rate currency="JPY" multiplier="100">2.7847</Rate>
+  <Rate currency="USD">4.3800</Rate>
+</Cube>
+<Cube date="2026-03-05">
+  <Rate currency="EUR">5.0937</Rate>
+  <Rate currency="HUF" multiplier="100">1.3191</Rate>
+  <Rate currency="JPY" multiplier="100">2.7899</Rate>
+  <Rate currency="USD">4.3883</Rate>
+</Cube>
+<Cube date="2026-03-06">
+  <Rate currency="EUR">5.0941</Rate>
+  <Rate currency="HUF" multiplier="100">1.2982</Rate>
+  <Rate currency="JPY" multiplier="100">2.7863</Rate>
+  <Rate currency="USD">4.3981</Rate>
+</Cube>
+<Cube date="2026-03-09">
+  <Rate currency="EUR">5.0979</Rate>
+  <Rate currency="HUF" multiplier="100">1.2809</Rate>
+  <Rate currency="JPY" multiplier="100">2.7820</Rate>
+  <Rate currency="USD">4.4111</Rate>
+</Cube>
+<Cube date="2026-03-10">
+  <Rate currency="EUR">5.0955</Rate>
+  <Rate currency="HUF" multiplier="100">1.3180</Rate>
+  <Rate currency="JPY" multiplier="100">2.7752</Rate>
+  <Rate currency="USD">4.3795</Rate>
+</Cube>
+<Cube date="2026-03-11">
+  <Rate currency="EUR">5.0937</Rate>
+  <Rate currency="HUF" multiplier="100">1.3201</Rate>
+  <Rate currency="JPY" multiplier="100">2.7728</Rate>
+  <Rate currency="USD">4.3887</Rate>
+</Cube>
+<Cube date="2026-03-12">
+  <Rate currency="EUR">5.0938</Rate>
+  <Rate currency="HUF" multiplier="100">1.3140</Rate>
+  <Rate currency="JPY" multiplier="100">2.7777</Rate>
+  <Rate currency="USD">4.4079</Rate>
+</Cube>
+<Cube date="2026-03-13">
+  <Rate currency="EUR">5.0947</Rate>
+  <Rate currency="HUF" multiplier="100">1.3029</Rate>
+  <Rate currency="JPY" multiplier="100">2.7877</Rate>
+  <Rate currency="USD">4.4429</Rate>
+</Cube>
+<Cube date="2026-03-16">
+  <Rate currency="EUR">5.0949</Rate>
+  <Rate currency="HUF" multiplier="100">1.3060</Rate>
+  <Rate currency="JPY" multiplier="100">2.7895</Rate>
+  <Rate currency="USD">4.4419</Rate>
+</Cube>
+<Cube date="2026-03-17">
+  <Rate currency="EUR">5.0937</Rate>
+  <Rate currency="HUF" multiplier="100">1.3028</Rate>
+  <Rate currency="JPY" multiplier="100">2.7820</Rate>
+  <Rate currency="USD">4.4270</Rate>
+</Cube>
+<Cube date="2026-03-18">
+  <Rate currency="EUR">5.0940</Rate>
+  <Rate currency="HUF" multiplier="100">1.3091</Rate>
+  <Rate currency="JPY" multiplier="100">2.7755</Rate>
+  <Rate currency="USD">4.4133</Rate>
+</Cube>
+<Cube date="2026-03-19">
+  <Rate currency="EUR">5.0959</Rate>
+  <Rate currency="HUF" multiplier="100">1.2971</Rate>
+  <Rate currency="JPY" multiplier="100">2.7894</Rate>
+  <Rate currency="USD">4.4420</Rate>
+</Cube>
+<Cube date="2026-03-20">
+  <Rate currency="EUR">5.0951</Rate>
+  <Rate currency="HUF" multiplier="100">1.2965</Rate>
+  <Rate currency="JPY" multiplier="100">2.7773</Rate>
+  <Rate currency="USD">4.4087</Rate>
+</Cube>
+<Cube date="2026-03-23">
+  <Rate currency="EUR">5.0989</Rate>
+  <Rate currency="HUF" multiplier="100">1.2937</Rate>
+  <Rate currency="JPY" multiplier="100">2.7804</Rate>
+  <Rate currency="USD">4.4373</Rate>
+</Cube>
+<Cube date="2026-03-24">
+  <Rate currency="EUR">5.0962</Rate>
+  <Rate currency="HUF" multiplier="100">1.3068</Rate>
+  <Rate currency="JPY" multiplier="100">2.7703</Rate>
+  <Rate currency="USD">4.3982</Rate>
+</Cube>
+<Cube date="2026-03-25">
+  <Rate currency="EUR">5.0952</Rate>
+  <Rate currency="HUF" multiplier="100">1.3099</Rate>
+  <Rate currency="JPY" multiplier="100">2.7627</Rate>
+  <Rate currency="USD">4.3913</Rate>
+</Cube>
+<Cube date="2026-03-26">
+  <Rate currency="EUR">5.0953</Rate>
+  <Rate currency="HUF" multiplier="100">1.3125</Rate>
+  <Rate currency="JPY" multiplier="100">2.7639</Rate>
+  <Rate currency="USD">4.4085</Rate>
+</Cube>
+<Cube date="2026-03-27">
+  <Rate currency="EUR">5.0991</Rate>
+  <Rate currency="HUF" multiplier="100">1.3091</Rate>
+  <Rate currency="JPY" multiplier="100">2.7691</Rate>
+  <Rate currency="USD">4.4276</Rate>
+</Cube>
+<Cube date="2026-03-30">
+  <Rate currency="EUR">5.0989</Rate>
+  <Rate currency="HUF" multiplier="100">1.3080</Rate>
+  <Rate currency="JPY" multiplier="100">2.7791</Rate>
+  <Rate currency="USD">4.4354</Rate>
+</Cube>
+<Cube date="2026-03-31">
+  <Rate currency="EUR">5.0988</Rate>
+  <Rate currency="HUF" multiplier="100">1.3200</Rate>
+  <Rate currency="JPY" multiplier="100">2.7849</Rate>
+  <Rate currency="USD">4.4463</Rate>
+</Cube>
+<Cube date="2026-04-01">
+  <Rate currency="EUR">5.0985</Rate>
+  <Rate currency="HUF" multiplier="100">1.3335</Rate>
+  <Rate currency="JPY" multiplier="100">2.7730</Rate>
+  <Rate currency="USD">4.3987</Rate>
+</Cube>
+<Cube date="2026-04-02">
+  <Rate currency="EUR">5.0986</Rate>
+  <Rate currency="HUF" multiplier="100">1.3298</Rate>
+  <Rate currency="JPY" multiplier="100">2.7717</Rate>
+  <Rate currency="USD">4.4232</Rate>
+</Cube>
+<Cube date="2026-04-03">
+  <Rate currency="EUR">5.0978</Rate>
+  <Rate currency="HUF" multiplier="100">1.3229</Rate>
+  <Rate currency="JPY" multiplier="100">2.7676</Rate>
+  <Rate currency="USD">4.4169</Rate>
+</Cube>
+<Cube date="2026-04-06">
+  <Rate currency="EUR">5.0961</Rate>
+  <Rate currency="HUF" multiplier="100">1.3348</Rate>
+  <Rate currency="JPY" multiplier="100">2.7667</Rate>
+  <Rate currency="USD">4.4092</Rate>
+</Cube>
+<Cube date="2026-04-07">
+  <Rate currency="EUR">5.0963</Rate>
+  <Rate currency="HUF" multiplier="100">1.3377</Rate>
+  <Rate currency="JPY" multiplier="100">2.7610</Rate>
+  <Rate currency="USD">4.4068</Rate>
+</Cube>
+<Cube date="2026-04-08">
+  <Rate currency="EUR">5.0949</Rate>
+  <Rate currency="HUF" multiplier="100">1.3440</Rate>
+  <Rate currency="JPY" multiplier="100">2.7523</Rate>
+  <Rate currency="USD">4.3602</Rate>
+</Cube>
+<Cube date="2026-04-09">
+  <Rate currency="EUR">5.0937</Rate>
+  <Rate currency="HUF" multiplier="100">1.3470</Rate>
+  <Rate currency="JPY" multiplier="100">2.7444</Rate>
+  <Rate currency="USD">4.3629</Rate>
+</Cube>
+<Cube date="2026-04-14">
+  <Rate currency="EUR">5.0920</Rate>
+  <Rate currency="HUF" multiplier="100">1.4012</Rate>
+  <Rate currency="JPY" multiplier="100">2.7180</Rate>
+  <Rate currency="USD">4.3196</Rate>
+</Cube>
+<Cube date="2026-04-15">
+  <Rate currency="EUR">5.0914</Rate>
+  <Rate currency="HUF" multiplier="100">1.3986</Rate>
+  <Rate currency="JPY" multiplier="100">2.7198</Rate>
+  <Rate currency="USD">4.3224</Rate>
+</Cube>
+<Cube date="2026-04-16">
+  <Rate currency="EUR">5.0918</Rate>
+  <Rate currency="HUF" multiplier="100">1.3952</Rate>
+  <Rate currency="JPY" multiplier="100">2.7179</Rate>
+  <Rate currency="USD">4.3226</Rate>
+</Cube>
+<Cube date="2026-04-17">
+  <Rate currency="EUR">5.0987</Rate>
+  <Rate currency="HUF" multiplier="100">1.4028</Rate>
+  <Rate currency="JPY" multiplier="100">2.7184</Rate>
+  <Rate currency="USD">4.3229</Rate>
+</Cube>
+<Cube date="2026-04-20">
+  <Rate currency="EUR">5.0989</Rate>
+  <Rate currency="HUF" multiplier="100">1.4082</Rate>
+  <Rate currency="JPY" multiplier="100">2.7273</Rate>
+  <Rate currency="USD">4.3341</Rate>
+</Cube>
+<Cube date="2026-04-21">
+  <Rate currency="EUR">5.0988</Rate>
+  <Rate currency="HUF" multiplier="100">1.4086</Rate>
+  <Rate currency="JPY" multiplier="100">2.7242</Rate>
+  <Rate currency="USD">4.3365</Rate>
+</Cube>
+<Cube date="2026-04-22">
+  <Rate currency="EUR">5.0951</Rate>
+  <Rate currency="HUF" multiplier="100">1.4003</Rate>
+  <Rate currency="JPY" multiplier="100">2.7211</Rate>
+  <Rate currency="USD">4.3357</Rate>
+</Cube>
+<Cube date="2026-04-23">
+  <Rate currency="EUR">5.0924</Rate>
+  <Rate currency="HUF" multiplier="100">1.3917</Rate>
+  <Rate currency="JPY" multiplier="100">2.7265</Rate>
+  <Rate currency="USD">4.3551</Rate>
+</Cube>
+<Cube date="2026-04-24">
+  <Rate currency="EUR">5.0928</Rate>
+  <Rate currency="HUF" multiplier="100">1.3850</Rate>
+  <Rate currency="JPY" multiplier="100">2.7282</Rate>
+  <Rate currency="USD">4.3580</Rate>
+</Cube>
+<Cube date="2026-04-27">
+  <Rate currency="EUR">5.0927</Rate>
+  <Rate currency="HUF" multiplier="100">1.3999</Rate>
+  <Rate currency="JPY" multiplier="100">2.7242</Rate>
+  <Rate currency="USD">4.3374</Rate>
+</Cube>
+<Cube date="2026-04-28">
+  <Rate currency="EUR">5.0937</Rate>
+  <Rate currency="HUF" multiplier="100">1.3945</Rate>
+  <Rate currency="JPY" multiplier="100">2.7300</Rate>
+  <Rate currency="USD">4.3541</Rate>
+</Cube>
+<Cube date="2026-04-29">
+  <Rate currency="EUR">5.1004</Rate>
+  <Rate currency="HUF" multiplier="100">1.4001</Rate>
+  <Rate currency="JPY" multiplier="100">2.7289</Rate>
+  <Rate currency="USD">4.3595</Rate>
+</Cube>
+<Cube date="2026-04-30">
+  <Rate currency="EUR">5.1417</Rate>
+  <Rate currency="HUF" multiplier="100">1.4088</Rate>
+  <Rate currency="JPY" multiplier="100">2.7591</Rate>
+  <Rate currency="USD">4.3965</Rate>
+</Cube>
+<Cube date="2026-05-04">
+  <Rate currency="EUR">5.1998</Rate>
+  <Rate currency="HUF" multiplier="100">1.4324</Rate>
+  <Rate currency="JPY" multiplier="100">2.8268</Rate>
+  <Rate currency="USD">4.4376</Rate>
+</Cube>
+<Cube date="2026-05-05">
+  <Rate currency="EUR">5.2180</Rate>
+  <Rate currency="HUF" multiplier="100">1.4358</Rate>
+  <Rate currency="JPY" multiplier="100">2.8329</Rate>
+  <Rate currency="USD">4.4644</Rate>
+</Cube>
+<Cube date="2026-05-06">
+  <Rate currency="EUR">5.2688</Rate>
+  <Rate currency="HUF" multiplier="100">1.4665</Rate>
+  <Rate currency="JPY" multiplier="100">2.8685</Rate>
+  <Rate currency="USD">4.4746</Rate>
+</Cube>
+<Cube date="2026-05-07">
+  <Rate currency="EUR">5.2661</Rate>
+  <Rate currency="HUF" multiplier="100">1.4778</Rate>
+  <Rate currency="JPY" multiplier="100">2.8601</Rate>
+  <Rate currency="USD">4.4727</Rate>
+</Cube>
+<Cube date="2026-05-08">
+  <Rate currency="EUR">5.2364</Rate>
+  <Rate currency="HUF" multiplier="100">1.4731</Rate>
+  <Rate currency="JPY" multiplier="100">2.8395</Rate>
+  <Rate currency="USD">4.4493</Rate>
+</Cube>
+<Cube date="2026-05-11">
+  <Rate currency="EUR">5.2222</Rate>
+  <Rate currency="HUF" multiplier="100">1.4691</Rate>
+  <Rate currency="JPY" multiplier="100">2.8243</Rate>
+  <Rate currency="USD">4.4371</Rate>
+</Cube>
+<Cube date="2026-05-12">
+  <Rate currency="EUR">5.2103</Rate>
+  <Rate currency="HUF" multiplier="100">1.4604</Rate>
+  <Rate currency="JPY" multiplier="100">2.8146</Rate>
+  <Rate currency="USD">4.4352</Rate>
+</Cube>
+<Cube date="2026-05-13">
+  <Rate currency="EUR">5.2056</Rate>
+  <Rate currency="HUF" multiplier="100">1.4468</Rate>
+  <Rate currency="JPY" multiplier="100">2.8176</Rate>
+  <Rate currency="USD">4.4479</Rate>
+</Cube>
+<Cube date="2026-05-14">
+  <Rate currency="EUR">5.2052</Rate>
+  <Rate currency="HUF" multiplier="100">1.4561</Rate>
+  <Rate currency="JPY" multiplier="100">2.8154</Rate>
+  <Rate currency="USD">4.4455</Rate>
+</Cube>
+<Cube date="2026-05-15">
+  <Rate currency="EUR">5.2088</Rate>
+  <Rate currency="HUF" multiplier="100">1.4457</Rate>
+  <Rate currency="JPY" multiplier="100">2.8268</Rate>
+  <Rate currency="USD">4.4801</Rate>
+</Cube>
+</Body></DataSet>

@@ -111,3 +111,8 @@ REST_FRAMEWORK = {
 NOMINATIM_URL = os.environ.get("NOMINATIM_URL", "https://nominatim.openstreetmap.org")
 NOMINATIM_USER_AGENT = os.environ.get("NOMINATIM_USER_AGENT", "travelblog/0.1 (portfolio project)")
 NOMINATIM_TIMEOUT_SECONDS = 5
+
+# National Bank of Romania reference rates (ADR 0003). The XML feeds moved from www.bnr.ro to
+# curs.bnr.ro in 2026; the yearly file is about 350 KB, hence the longer timeout.
+NBR_URL = os.environ.get("NBR_URL", "https://curs.bnr.ro")
+NBR_TIMEOUT_SECONDS = 10
