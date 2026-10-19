@@ -1,7 +1,9 @@
-import { Anchor, Badge, Group, Skeleton, Stack, Text, Title } from '@mantine/core';
+import { Anchor, Badge, Button, Group, Skeleton, Stack, Text, Title } from '@mantine/core';
 import { Link, useParams } from 'react-router';
 
+import { useCurrentUser } from '../features/auth/api';
 import { useTrip } from '../features/trips/api';
+import { DeleteTripButton } from '../features/trips/DeleteTripButton';
 import { formatDateRange } from '../lib/dates';
 
 /** The trip's title, dates and summary. The cover banner and the route, journal, photos and
@@ -9,6 +11,7 @@ import { formatDateRange } from '../lib/dates';
 export function TripPage() {
   const { tripId = '' } = useParams();
   const { data: trip, isPending, isError } = useTrip(tripId);
+  const { data: user } = useCurrentUser();
 
   if (isPending) {
     return (
@@ -35,9 +38,20 @@ export function TripPage() {
 
   return (
     <Stack gap="xs">
-      <Group gap="sm">
-        <Title order={1}>{trip.title}</Title>
-        {trip.status === 'draft' && <Badge color="orange">Draft</Badge>}
+      <Group justify="space-between">
+        <Group gap="sm">
+          <Title order={1}>{trip.title}</Title>
+          {trip.status === 'draft' && <Badge color="orange">Draft</Badge>}
+        </Group>
+        {/* Not rendered for visitors (docs/ui-design.md, author-only controls). */}
+        {user?.is_author && (
+          <Group gap="sm">
+            <Button component={Link} to={`/trips/${trip.id}/edit`} variant="default">
+              Edit
+            </Button>
+            <DeleteTripButton trip={trip} />
+          </Group>
+        )}
       </Group>
       <Text c="dimmed">{formatDateRange(trip.start_date, trip.end_date)}</Text>
       {trip.summary && <Text ff="heading">{trip.summary}</Text>}

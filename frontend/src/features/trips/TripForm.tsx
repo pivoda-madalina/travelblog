@@ -1,6 +1,7 @@
 import {
   Button,
   Group,
+  Image,
   Input,
   SegmentedControl,
   Stack,
@@ -13,7 +14,7 @@ import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { isNotEmpty, useForm } from '@mantine/form';
 
 import { ApiError } from '../../api/client';
-import type { TripInput, TripStatus } from './api';
+import type { Trip, TripInput, TripStatus } from './api';
 
 // The proposed answer to #26; the backend checks the same limits.
 const MAX_PHOTO_BYTES = 10 * 1024 * 1024;
@@ -33,6 +34,8 @@ const fieldForApiError: Record<string, keyof TripFormValues> = {
 };
 
 interface TripFormProps {
+  /** The trip being edited; without it the form starts empty. */
+  trip?: Trip;
   submitting: boolean;
   onSubmit: (trip: TripInput) => Promise<unknown>;
   onCancel: () => void;
@@ -41,13 +44,19 @@ interface TripFormProps {
 
 /** The trip form from wireframe 2. Business rules are checked by the API, whose field errors
  * appear under the matching input; the checks here only catch empty fields early. */
-export function TripForm({ submitting, onSubmit, onCancel, onUnexpectedError }: TripFormProps) {
+export function TripForm({
+  trip,
+  submitting,
+  onSubmit,
+  onCancel,
+  onUnexpectedError,
+}: TripFormProps) {
   const form = useForm<TripFormValues>({
     initialValues: {
-      title: '',
-      dates: [null, null],
-      summary: '',
-      status: 'draft',
+      title: trip?.title ?? '',
+      dates: [trip?.start_date ?? null, trip?.end_date ?? null],
+      summary: trip?.summary ?? '',
+      status: trip?.status ?? 'draft',
       cover_photo: null,
     },
     validate: {
@@ -101,21 +110,27 @@ export function TripForm({ submitting, onSubmit, onCancel, onUnexpectedError }: 
           {...form.getInputProps('summary')}
         />
         <Input.Wrapper label="Cover photo" error={form.errors.cover_photo}>
-          <Dropzone
-            mt={4}
-            multiple={false}
-            accept={[MIME_TYPES.jpeg]}
-            maxSize={MAX_PHOTO_BYTES}
-            onDrop={([file]) => {
-              form.setFieldValue('cover_photo', file ?? null);
-              form.clearFieldError('cover_photo');
-            }}
-            onReject={() => form.setFieldError('cover_photo', 'Choose a JPEG of at most 10 MB.')}
-          >
-            <Text ta="center" c="dimmed" py="md">
-              {cover ? `${cover.name} selected` : 'Drop a JPEG here or browse'}
-            </Text>
-          </Dropzone>
+          <Group mt={4} align="stretch" wrap="nowrap">
+            <Dropzone
+              flex={1}
+              multiple={false}
+              accept={[MIME_TYPES.jpeg]}
+              maxSize={MAX_PHOTO_BYTES}
+              onDrop={([file]) => {
+                form.setFieldValue('cover_photo', file ?? null);
+                form.clearFieldError('cover_photo');
+              }}
+              onReject={() => form.setFieldError('cover_photo', 'Choose a JPEG of at most 10 MB.')}
+            >
+              <Text ta="center" c="dimmed" py="md">
+                {cover ? `${cover.name} selected` : 'Drop a JPEG here or browse'}
+              </Text>
+            </Dropzone>
+            {/* The current cover stays until a new file replaces it (US-02). */}
+            {trip?.cover_photo && !cover && (
+              <Image src={trip.cover_photo} alt="Current cover photo" w={120} radius="md" />
+            )}
+          </Group>
         </Input.Wrapper>
         <Input.Wrapper label="Status">
           <div>

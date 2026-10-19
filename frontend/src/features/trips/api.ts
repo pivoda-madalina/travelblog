@@ -38,7 +38,8 @@ export function useTrip(id: string) {
   });
 }
 
-/** Multipart, so the cover photo travels with the other fields (US-01). */
+/** Multipart, so the cover photo travels with the other fields (US-01). Without a new file the
+ * cover is left out, so an edit keeps the current one. */
 function toFormData({ cover_photo, ...fields }: TripInput): FormData {
   const form = new FormData();
   for (const [name, value] of Object.entries(fields)) {
@@ -56,6 +57,29 @@ export function useCreateTrip() {
     mutationFn: (trip: TripInput) => api.post<Trip>('/trips/', toFormData(trip)),
     onSuccess: (trip) => {
       queryClient.setQueryData(tripKeys.detail(trip.id), trip);
+      void queryClient.invalidateQueries({ queryKey: tripKeys.all, exact: true });
+    },
+  });
+}
+
+export function useUpdateTrip(id: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (trip: TripInput) => api.patch<Trip>(`/trips/${id}/`, toFormData(trip)),
+    onSuccess: (trip) => {
+      queryClient.setQueryData(tripKeys.detail(trip.id), trip);
+      void queryClient.invalidateQueries({ queryKey: tripKeys.all, exact: true });
+    },
+  });
+}
+
+/** Deletes the trip and everything in it (BR-11). */
+export function useDeleteTrip() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => api.delete(`/trips/${id}/`),
+    onSuccess: (_, id) => {
+      queryClient.removeQueries({ queryKey: tripKeys.detail(id) });
       void queryClient.invalidateQueries({ queryKey: tripKeys.all, exact: true });
     },
   });
