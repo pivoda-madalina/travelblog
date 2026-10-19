@@ -13,7 +13,7 @@ from core.tests.images import image_upload
 from journal.models import JournalEntry, Photo
 from journal.tests.factories import JournalEntryFactory, PhotoFactory
 from places.models import Place
-from places.tests.factories import PlaceFactory
+from places.tests.factories import CityFactory, PlaceFactory
 from trips.models import Trip
 from trips.tests.factories import TripFactory
 
@@ -268,3 +268,45 @@ def test_br14_visitor_cannot_edit_or_delete_a_trip(visitor):
     assert visitor.delete(detail(trip)).status_code == 403
     trip.refresh_from_db()
     assert trip.title != "Hacked"
+
+
+def test_cards_show_the_countries_of_the_trip_places_in_route_order(visitor):
+    trip = TripFactory()
+    italy = CityFactory(country_code="IT", country_name="Italy")
+    PlaceFactory(trip=trip, position=2, city=CityFactory(country_code="FR", country_name="France"))
+    PlaceFactory(trip=trip, position=1, city=italy)
+    PlaceFactory(
+        trip=trip,
+        position=3,
+        city=CityFactory(country_code="IT", country_name="Italy", name="Naples"),
+    )
+    TripFactory()
+
+    trips = visitor.get(LIST).json()
+
+    assert [trip["countries"] for trip in trips] == [[], ["Italy", "France"]]
+    assert visitor.get(detail(trip)).json()["countries"] == ["Italy", "France"]
+
+
+def test_listing_trips_costs_no_query_per_trip(visitor, django_assert_num_queries):
+    for _ in range(3):
+        trip = TripFactory()
+        PlaceFactory.create_batch(2, trip=trip)
+
+    # One query for the trips, one for their places with cities.
+    with django_assert_num_queries(2):
+        response = visitor.get(LIST)
+
+    assert all(len(trip["countries"]) == 1 for trip in response.json())
+
+
+def test_br14_author_sees_drafts_in_the_list(author):
+    draft = TripFactory(status=Trip.Status.DRAFT)
+    published = TripFactory(status=Trip.Status.PUBLISHED)
+
+    trips = author.get(LIST).json()
+
+    assert {(trip["id"], trip["status"]) for trip in trips} == {
+        (draft.pk, "draft"),
+        (published.pk, "published"),
+    }
