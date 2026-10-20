@@ -1,6 +1,6 @@
 import pytest
 
-from journal.models import Photo
+from journal.models import JournalEntry, Photo
 from journal.tests.factories import JournalEntryFactory, PhotoFactory
 from places.tests.factories import PlaceFactory
 
@@ -33,3 +33,7 @@ def test_journal_entry_and_photo_names():
 
     assert str(entry) == "Arrival"
     assert str(photo) == photo.image.name
+
+
+def test_entry_without_a_trip_is_left_to_field_validation():
+    JournalEntry(title="Arrival").clean()
