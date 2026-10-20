@@ -1,6 +1,11 @@
 import '@testing-library/jest-dom/vitest';
 
 import { notifications } from '@mantine/notifications';
+import { configure } from '@testing-library/react';
+
+// findBy* waits up to 1 s by default. A full run in a container or on a slower laptop can take
+// longer before screens that need several API answers settle.
+configure({ asyncUtilTimeout: 5000 });
 
 // jsdom lacks these browser APIs, and Mantine needs them (ADR 0005).
 Object.defineProperty(window, 'matchMedia', {
