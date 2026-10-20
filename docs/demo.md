@@ -108,6 +108,7 @@ In [demo/](demo/), taken from the seeded site:
 | [06-visitor-photo-viewer.png](demo/06-visitor-photo-viewer.png) | Full-screen viewer |
 | [07-author-trips-with-draft.png](demo/07-author-trips-with-draft.png) | Author's trip list with the draft |
 | [08-author-entry-editor.png](demo/08-author-entry-editor.png) | Entry editor with live preview |
+| [09-author-add-place.png](demo/09-author-add-place.png) | Add place window after a click on the route map, with the looked-up city |
 | [10-author-expense-form.png](demo/10-author-expense-form.png) | Expense with its saved NBR rate |
 | [11-author-budget.png](demo/11-author-budget.png) | Budget summary, over budget |
 | [12-author-expenses.png](demo/12-author-expenses.png) | Expense table with rates, sources and total |
