@@ -1,8 +1,10 @@
-import { SimpleGrid, Skeleton, Stack } from '@mantine/core';
+import { SimpleGrid, Skeleton, Stack, Text } from '@mantine/core';
 import { Navigate, useParams } from 'react-router';
 
 import { useCurrentUser } from '../auth/api';
-import { useTrip } from '../trips/api';
+import { type Trip, useTrip } from '../trips/api';
+import { useBudget } from './api';
+import { CategoryTotals, DifferenceCard, SpentCard } from './BudgetSummary';
 import { ExpenseTable } from './ExpenseTable';
 import { PlannedBudgetCard } from './PlannedBudgetCard';
 
@@ -25,11 +27,35 @@ export function BudgetTab() {
   }
   return (
     <Stack gap="xl">
-      <SimpleGrid cols={3}>
-        <PlannedBudgetCard trip={trip} />
-        {/* Spent, difference and categories arrive with US-13. */}
-      </SimpleGrid>
+      <Summary trip={trip} />
       <ExpenseTable trip={trip} />
     </Stack>
+  );
+}
+
+/** The cards and the category bars (US-10, US-13). */
+function Summary({ trip }: { trip: Trip }) {
+  const { data: summary, isPending, isError } = useBudget(trip.id);
+
+  return (
+    <>
+      <SimpleGrid cols={3}>
+        <PlannedBudgetCard trip={trip} />
+        {isPending ? (
+          <>
+            <Skeleton height={72} />
+            <Skeleton height={72} />
+          </>
+        ) : isError ? (
+          <Text c="red">Something went wrong. Try again.</Text>
+        ) : (
+          <>
+            <SpentCard summary={summary} />
+            <DifferenceCard summary={summary} />
+          </>
+        )}
+      </SimpleGrid>
+      {summary && <CategoryTotals summary={summary} />}
+    </>
   );
 }

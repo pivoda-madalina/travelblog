@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -5,7 +6,9 @@ from rest_framework.response import Response
 from budget.models import Expense
 from budget.rates import nbr_rate
 from budget.serializers import ExpenseSerializer
+from budget.summary import budget_summary
 from core.permissions import IsAuthor
+from trips.models import Trip
 
 
 class ExpenseViewSet(viewsets.ModelViewSet):
@@ -45,5 +48,31 @@ def exchange_rate(request):
             "rate": None if result.rate is None else f"{result.rate:.6f}",
             "rate_date": result.rate_date,
             "detail": result.message,
+        }
+    )
+
+
+def money(amount):
+    return None if amount is None else f"{amount:.2f}"
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthor])
+def trip_budget(request, pk):
+    """`GET /api/trips/{id}/budget/`: total spent, spending by category and planned versus spent,
+    all in RON (US-13, BR-01). For the author only (BR-14). `difference` is planned minus spent,
+    null without a planned budget."""
+    trip = get_object_or_404(Trip.objects.visible_to(request.user), pk=pk)
+    summary = budget_summary(trip)
+    return Response(
+        {
+            "planned": money(summary.planned),
+            "spent": money(summary.spent),
+            "difference": money(summary.difference),
+            "over_budget": summary.over_budget,
+            "categories": [
+                {"category": total.category.value, "spent": money(total.spent)}
+                for total in summary.categories
+            ],
         }
     )

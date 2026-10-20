@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { formatDate } from '../../lib/dates';
 import { formatRate, formatRon } from '../../lib/money';
 import type { Trip } from '../trips/api';
-import { categories, type Expense, useExpenses } from './api';
+import { categories, type Expense, useBudget, useExpenses } from './api';
 import { ExpenseModal } from './ExpenseModal';
 
 /** 1,234.50 EUR: an amount in its own currency, from the API's decimal string. */
@@ -32,6 +32,8 @@ function Rate({ expense }: { expense: Expense }) {
  * the rate used and the RON amount. Clicking a row opens it for editing. */
 export function ExpenseTable({ trip }: { trip: Trip }) {
   const { data: expenses, isPending, isError } = useExpenses(trip.id);
+  // The total comes from the API, which adds up the rounded amounts (BR-07).
+  const { data: summary } = useBudget(trip.id);
   // undefined: closed; null: adding; an expense: editing it.
   const [editing, setEditing] = useState<Expense | null | undefined>(undefined);
 
@@ -82,6 +84,16 @@ export function ExpenseTable({ trip }: { trip: Trip }) {
               </Table.Tr>
             ))}
           </Table.Tbody>
+          {summary && (
+            <Table.Tfoot>
+              <Table.Tr>
+                <Table.Th colSpan={5} ta="right">
+                  Total
+                </Table.Th>
+                <Table.Th ta="right">{formatRon(summary.spent)}</Table.Th>
+              </Table.Tr>
+            </Table.Tfoot>
+          )}
         </Table>
       )}
       <ExpenseModal

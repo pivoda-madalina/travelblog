@@ -103,6 +103,8 @@ export function useSetPlannedBudget(id: number) {
       api.patch<Trip>(`/trips/${id}/`, { planned_budget }),
     onSuccess: (trip) => {
       queryClient.setQueryData(tripKeys.detail(trip.id), trip);
+      // The budget summary's difference depends on it (US-13).
+      return queryClient.invalidateQueries({ queryKey: ['budget', trip.id] });
     },
   });
 }

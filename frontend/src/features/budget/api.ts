@@ -68,6 +68,28 @@ export const expenseKeys = {
   list: (tripId: number) => ['expenses', tripId] as const,
 };
 
+/** `GET /api/trips/{id}/budget/`, in RON (US-13, BR-01). `difference` is planned minus spent,
+ * negative when over budget; it and `planned` are null without a planned budget. Categories
+ * come largest first, every one of them. */
+export interface BudgetSummary {
+  planned: string | null;
+  spent: string;
+  difference: string | null;
+  over_budget: boolean;
+  categories: { category: Category; spent: string }[];
+}
+
+export const budgetKeys = {
+  summary: (tripId: number) => ['budget', tripId] as const,
+};
+
+export function useBudget(tripId: number) {
+  return useQuery({
+    queryKey: budgetKeys.summary(tripId),
+    queryFn: () => api.get<BudgetSummary>(`/trips/${tripId}/budget/`),
+  });
+}
+
 export function useExpenses(tripId: number) {
   return useQuery({
     queryKey: expenseKeys.list(tripId),
@@ -77,7 +99,11 @@ export function useExpenses(tripId: number) {
 
 function useExpensesChanged(tripId: number) {
   const queryClient = useQueryClient();
-  return () => queryClient.invalidateQueries({ queryKey: expenseKeys.list(tripId) });
+  return () =>
+    Promise.all([
+      queryClient.invalidateQueries({ queryKey: expenseKeys.list(tripId) }),
+      queryClient.invalidateQueries({ queryKey: budgetKeys.summary(tripId) }),
+    ]);
 }
 
 export function useAddExpense(tripId: number) {
