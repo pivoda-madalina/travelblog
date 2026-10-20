@@ -165,7 +165,7 @@ function EntryForm({ trip, entry, onClose }: EntryFormProps) {
               Preview
             </Text>
             <Paper withBorder p="md" mih={260} aria-label="Preview">
-              <Title order={3} mb="sm">
+              <Title order={4} mb="sm">
                 {title}
               </Title>
               <Markdown>{body}</Markdown>
