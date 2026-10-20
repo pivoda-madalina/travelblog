@@ -5,9 +5,10 @@ import { useParams } from 'react-router';
 
 import { useCurrentUser } from '../auth/api';
 import { useTrip } from '../trips/api';
-import { type JournalEntry, useJournalEntries } from './api';
+import { type JournalEntry, type Photo, useJournalEntries, usePhotos } from './api';
 import { EntryModal } from './EntryModal';
 import { Markdown } from './Markdown';
+import { PhotoGrid } from './PhotoGrid';
 
 /** The entries of each day, in date order; the API sends them sorted. */
 function byDay(entries: JournalEntry[]): [string, JournalEntry[]][] {
@@ -18,14 +19,27 @@ function byDay(entries: JournalEntry[]): [string, JournalEntry[]][] {
   return [...days.entries()];
 }
 
-/** Wireframe 4: entries grouped by day, several to a day (US-07). Visitors read them; only the
- * author writes and edits. */
+/** Each entry's attached photos, in upload order; gallery-only photos are left out. */
+function byEntry(photos: Photo[]): Map<number, Photo[]> {
+  const entries = new Map<number, Photo[]>();
+  for (const photo of photos) {
+    if (photo.journal_entry !== null) {
+      entries.set(photo.journal_entry, [...(entries.get(photo.journal_entry) ?? []), photo]);
+    }
+  }
+  return entries;
+}
+
+/** Wireframe 4: entries grouped by day, several to a day (US-07), each with its attached photos
+ * (US-09). Visitors read them; only the author writes and edits. */
 export function JournalTab() {
   const { tripId = '' } = useParams();
   // The trip page has loaded the trip already, so this reads it from the cache.
   const { data: trip } = useTrip(tripId);
   const { data: user } = useCurrentUser();
   const entries = useJournalEntries(Number(tripId));
+  // The journal reads without photos while they load or if they fail.
+  const { data: photos = [] } = usePhotos(Number(tripId));
   // undefined: closed; null: writing a new entry; an entry: editing it.
   const [editing, setEditing] = useState<JournalEntry | null | undefined>(undefined);
 
@@ -37,6 +51,7 @@ export function JournalTab() {
   }
 
   const isAuthor = user?.is_author ?? false;
+  const entryPhotos = byEntry(photos);
   return (
     <Stack gap="xl">
       {isAuthor && (
@@ -73,6 +88,9 @@ export function JournalTab() {
                   </Group>
                 </Group>
                 <Markdown>{entry.body}</Markdown>
+                {entryPhotos.has(entry.id) && (
+                  <PhotoGrid photos={entryPhotos.get(entry.id) ?? []} cols={6} height={100} />
+                )}
               </article>
             ))}
           </Stack>

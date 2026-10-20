@@ -180,3 +180,51 @@ test('a photo the API refuses stays in the list with the reason', async () => {
   await waitFor(() => expect(within(modal).queryByText('IMG_0412.jpg')).not.toBeInTheDocument());
   expect(within(modal).getByText('renamed.jpg')).toBeInTheDocument();
 });
+
+const trevi = {
+  ...colosseum,
+  id: 2,
+  image: '/media/photos/IMG_0413.jpg',
+  thumbnail: '/media/photos/thumbnails/IMG_0413.jpg',
+  caption: 'Trevi Fountain',
+};
+
+test('clicking a photo opens it full size, with arrows to the others', async () => {
+  mockApi({ 'GET /auth/me/': visitor, 'GET /trips/7/': trip, [PHOTOS]: [colosseum, trevi] });
+  const user = userEvent.setup();
+  renderRoute('/trips/7/photos');
+
+  await user.click(await screen.findByRole('button', { name: 'Open Trevi Fountain' }));
+
+  const viewer = await screen.findByRole('dialog', { name: 'Trevi Fountain · 2 / 2' });
+  // The viewer loads the full image, not the thumbnail.
+  expect(within(viewer).getByRole('img')).toHaveAttribute('src', '/media/photos/IMG_0413.jpg');
+  expect(within(viewer).getByRole('button', { name: 'Next photo' })).toBeDisabled();
+  await user.click(within(viewer).getByRole('button', { name: 'Previous photo' }));
+  expect(
+    await screen.findByRole('dialog', { name: 'Colosseum at dusk · 1 / 2' }),
+  ).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: 'Previous photo' })).toBeDisabled();
+});
+
+test('the arrow keys move between photos and Escape closes the viewer', async () => {
+  mockApi({ 'GET /auth/me/': visitor, 'GET /trips/7/': trip, [PHOTOS]: [colosseum, trevi] });
+  const user = userEvent.setup();
+  renderRoute('/trips/7/photos');
+
+  await user.click(await screen.findByRole('button', { name: 'Open Colosseum at dusk' }));
+  await screen.findByRole('dialog', { name: 'Colosseum at dusk · 1 / 2' });
+
+  await user.keyboard('{ArrowRight}');
+  expect(await screen.findByRole('dialog', { name: 'Trevi Fountain · 2 / 2' })).toBeInTheDocument();
+  // Past the last photo the viewer stays put.
+  await user.keyboard('{ArrowRight}');
+  expect(screen.getByRole('dialog', { name: 'Trevi Fountain · 2 / 2' })).toBeInTheDocument();
+  await user.keyboard('{ArrowLeft}');
+  expect(
+    await screen.findByRole('dialog', { name: 'Colosseum at dusk · 1 / 2' }),
+  ).toBeInTheDocument();
+
+  await user.keyboard('{Escape}');
+  await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+});
