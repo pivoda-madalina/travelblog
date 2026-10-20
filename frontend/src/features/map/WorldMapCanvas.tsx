@@ -30,7 +30,14 @@ export function WorldMapCanvas({ countries, cities }: WorldMapCanvasProps) {
   };
 
   return (
-    <MapContainer center={[30, 10]} zoom={2} minZoom={2} worldCopyJump style={{ height: '100%' }}>
+    // isolation keeps Leaflet's layers (z-index 400 to 1000) inside the map, below modals and menus.
+    <MapContainer
+      center={[30, 10]}
+      zoom={2}
+      minZoom={2}
+      worldCopyJump
+      style={{ height: '100%', isolation: 'isolate' }}
+    >
       <OsmTileLayer />
       {/* GeoJSON does not redraw when its data changes, so the key forces a new layer. */}
       <GeoJSON
