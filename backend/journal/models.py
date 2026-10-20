@@ -1,4 +1,7 @@
+from django.core.exceptions import ValidationError
 from django.db import models
+
+from trips.models import format_date
 
 
 class JournalEntry(models.Model):
@@ -16,6 +19,22 @@ class JournalEntry(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
+    def clean(self):
+        if self.trip_id is None:
+            return
+        trip = self.trip
+        errors = {}
+        # BR-09: an entry is dated within its trip. A day can have several entries (US-07).
+        if self.date is not None and not trip.start_date <= self.date <= trip.end_date:
+            errors["date"] = (
+                "The date must be within the trip, "
+                f"{format_date(trip.start_date)} to {format_date(trip.end_date)}."
+            )
+        if self.place is not None and self.place.trip_id != self.trip_id:
+            errors["place"] = "Choose a place on this trip's route."
+        if errors:
+            raise ValidationError(errors)
 
 
 class Photo(models.Model):
