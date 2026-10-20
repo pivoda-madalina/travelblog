@@ -96,6 +96,24 @@ test('entries are grouped by day with their Markdown formatted', async () => {
   expect(screen.getByRole('heading', { name: 'Early start' })).toBeInTheDocument();
 });
 
+test('headings in an entry rank below the entry title', async () => {
+  mockApi({
+    'GET /auth/me/': visitor,
+    'GET /trips/7/': trip,
+    [ENTRIES]: [{ ...arrival, body: '# Top\n\n## Early start\n\n### Detail' }],
+  });
+
+  renderRoute('/trips/7/journal');
+
+  // The day is an h3 and the entry title an h4 (wireframe 4).
+  expect(
+    await screen.findByRole('heading', { name: 'Arrival in Rome', level: 4 }),
+  ).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: 'Top', level: 5 })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: 'Early start', level: 5 })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: 'Detail', level: 6 })).toBeInTheDocument();
+});
+
 test('raw HTML in an entry is not rendered', async () => {
   mockApi({ 'GET /auth/me/': visitor, 'GET /trips/7/': trip, [ENTRIES]: [vatican] });
 
