@@ -1,9 +1,27 @@
-from rest_framework import serializers
+from rest_framework import serializers, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
+from budget.models import Expense
 from budget.rates import nbr_rate
+from budget.serializers import ExpenseSerializer
 from core.permissions import IsAuthor
+
+
+class ExpenseViewSet(viewsets.ModelViewSet):
+    """A trip's expenses by date: `/api/expenses/?trip=12`. For the author only, reads
+    included (BR-14)."""
+
+    queryset = Expense.objects.order_by("date", "id")
+    serializer_class = ExpenseSerializer
+    permission_classes = [IsAuthor]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        trip = self.request.query_params.get("trip")
+        if trip is not None:
+            queryset = queryset.filter(trip=trip) if trip.isdigit() else queryset.none()
+        return queryset
 
 
 class RateQuerySerializer(serializers.Serializer):

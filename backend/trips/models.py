@@ -106,5 +106,12 @@ class Trip(models.Model):
                 f"A place or journal entry is dated {format_date(max(dates))}, after this "
                 "end date. Change its date first."
             )
+        # Expenses may come before the trip but not after it (#27).
+        last_expense = self.expenses.order_by("-date").values_list("date", flat=True).first()
+        if "end_date" not in errors and last_expense and last_expense > self.end_date:
+            errors["end_date"] = (
+                f"An expense is dated {format_date(last_expense)}, after this end date. "
+                "Change its date first."
+            )
         if errors:
             raise ValidationError(errors)

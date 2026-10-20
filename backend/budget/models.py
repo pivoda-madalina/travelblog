@@ -1,4 +1,7 @@
+from django.core.exceptions import ValidationError
 from django.db import models
+
+from trips.models import format_date
 
 # Amounts are in their own currency with 2 decimal places; rates are RON per 1 unit with 6.
 AMOUNT = {"max_digits": 12, "decimal_places": 2}
@@ -51,6 +54,15 @@ class Expense(models.Model):
 
     def __str__(self) -> str:
         return f"{self.description}: {self.amount} {self.currency}"
+
+    def clean(self):
+        # Expenses may be paid before the trip starts, for example flights booked in advance,
+        # but not after it ends (#27).
+        if self.trip_id is None or self.date is None:
+            return
+        if self.date > self.trip.end_date:
+            end = format_date(self.trip.end_date)
+            raise ValidationError({"date": f"The date cannot be after the trip ends, {end}."})
 
 
 class ExchangeRate(models.Model):

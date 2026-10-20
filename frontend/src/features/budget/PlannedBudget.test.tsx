@@ -24,7 +24,7 @@ function body(init: RequestInit): unknown {
 }
 
 test('the planned budget is shown in RON', async () => {
-  mockApi({ 'GET /auth/me/': author, 'GET /trips/7/': trip });
+  mockApi({ 'GET /auth/me/': author, 'GET /trips/7/': trip, 'GET /expenses/?trip=7': [] });
 
   renderRoute('/trips/7/budget');
 
@@ -32,7 +32,11 @@ test('the planned budget is shown in RON', async () => {
 });
 
 test('without a planned budget the card says it is not set', async () => {
-  mockApi({ 'GET /auth/me/': author, 'GET /trips/7/': { ...trip, planned_budget: null } });
+  mockApi({
+    'GET /auth/me/': author,
+    'GET /trips/7/': { ...trip, planned_budget: null },
+    'GET /expenses/?trip=7': [],
+  });
 
   renderRoute('/trips/7/budget');
 
@@ -44,6 +48,7 @@ test('the author edits the planned budget in place', async () => {
   mockApi({
     'GET /auth/me/': author,
     'GET /trips/7/': trip,
+    'GET /expenses/?trip=7': [],
     'PATCH /trips/7/': (init) => {
       sent = body(init);
       return { ...trip, planned_budget: '6500.50' };
@@ -68,6 +73,7 @@ test('clearing the planned budget sends null', async () => {
   mockApi({
     'GET /auth/me/': author,
     'GET /trips/7/': trip,
+    'GET /expenses/?trip=7': [],
     'PATCH /trips/7/': (init) => {
       sent = body(init);
       return { ...trip, planned_budget: null };
@@ -89,6 +95,7 @@ test('a negative amount shows the error from the API', async () => {
   mockApi({
     'GET /auth/me/': author,
     'GET /trips/7/': trip,
+    'GET /expenses/?trip=7': [],
     'PATCH /trips/7/': Response.json({ planned_budget: [error] }, { status: 400 }),
   });
   const user = userEvent.setup();
@@ -103,7 +110,7 @@ test('a negative amount shows the error from the API', async () => {
 });
 
 test('cancelling keeps the saved planned budget', async () => {
-  mockApi({ 'GET /auth/me/': author, 'GET /trips/7/': trip });
+  mockApi({ 'GET /auth/me/': author, 'GET /trips/7/': trip, 'GET /expenses/?trip=7': [] });
   const user = userEvent.setup();
   renderRoute('/trips/7/budget');
 

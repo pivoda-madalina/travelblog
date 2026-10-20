@@ -1,7 +1,12 @@
 from django.urls import path
+from rest_framework.routers import SimpleRouter
 
-from budget.views import exchange_rate
+from budget.views import ExpenseViewSet, exchange_rate
+
+router = SimpleRouter()
+router.register("expenses", ExpenseViewSet, basename="expense")
 
 urlpatterns = [
     path("rates/", exchange_rate, name="exchange-rate"),
+    *router.urls,
 ]
