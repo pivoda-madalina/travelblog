@@ -52,10 +52,15 @@ export function TripMap({ places, pending, onMapClick }: TripMapProps) {
 
   return (
     <Box h={480} style={{ borderRadius: 'var(--mantine-radius-md)', overflow: 'hidden' }}>
+      {/* isolation keeps Leaflet's layers (z-index 400 to 1000) inside the map, below modals. */}
       <MapContainer
         center={WORLD_CENTER}
         zoom={WORLD_ZOOM}
-        style={{ height: '100%', cursor: onMapClick ? 'crosshair' : undefined }}
+        style={{
+          height: '100%',
+          isolation: 'isolate',
+          cursor: onMapClick ? 'crosshair' : undefined,
+        }}
       >
         <OsmTileLayer />
         <FitRoute view={routeView(positions)} />
