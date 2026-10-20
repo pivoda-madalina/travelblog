@@ -43,16 +43,13 @@ export function PhotoViewer({ photos, index, onChange, onClose }: PhotoViewerPro
     >
       {photo && (
         <Group wrap="nowrap" justify="space-between" h="calc(100vh - 100px)">
-          <ActionIcon
-            size="xl"
-            variant="subtle"
-            color="gray"
-            aria-label="Previous photo"
+          <ArrowButton
+            label="Previous photo"
             disabled={!hasPrevious}
             onClick={() => onChange((index ?? 0) - 1)}
           >
             ‹
-          </ActionIcon>
+          </ArrowButton>
           <Stack align="center" justify="center" h="100%" flex={1} miw={0}>
             <Image
               src={photo.image}
@@ -62,18 +59,46 @@ export function PhotoViewer({ photos, index, onChange, onClose }: PhotoViewerPro
               w="auto"
             />
           </Stack>
-          <ActionIcon
-            size="xl"
-            variant="subtle"
-            color="gray"
-            aria-label="Next photo"
+          <ArrowButton
+            label="Next photo"
             disabled={!hasNext}
             onClick={() => onChange((index ?? 0) + 1)}
           >
             ›
-          </ActionIcon>
+          </ArrowButton>
         </Group>
       )}
     </Modal>
+  );
+}
+
+interface ArrowButtonProps {
+  label: string;
+  disabled: boolean;
+  onClick: () => void;
+  children: string;
+}
+
+/** A light arrow on a dark disc, readable on the dark backdrop. At either end of the photos the
+ * arrow fades out instead of taking Mantine's light disabled background. */
+function ArrowButton({ label, disabled, onClick, children }: ArrowButtonProps) {
+  return (
+    <ActionIcon
+      size={56}
+      radius="xl"
+      variant="filled"
+      color="dark.5"
+      aria-label={label}
+      disabled={disabled}
+      onClick={onClick}
+      style={{
+        fontSize: 36,
+        lineHeight: 1,
+        color: 'var(--mantine-color-white)',
+        ...(disabled && { background: 'transparent', opacity: 0.25 }),
+      }}
+    >
+      {children}
+    </ActionIcon>
   );
 }
