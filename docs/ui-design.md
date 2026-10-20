@@ -310,6 +310,7 @@ Expense form [author], a modal (US-11, US-12):
 ```
 
 - Rate rules and conversion run on the backend (BR-02 to BR-05). The form sends an empty rate to mean "use NBR", and after saving the table shows the rate, its source and the RON amount.
+- As soon as the date and currency are chosen, the NBR rate that would be used appears as the Rate placeholder, with the date it was published (US-12). When editing an expense with an NBR rate, the saved rate is shown instead and kept unless the date or currency changes (BR-05).
 - If the NBR has no rate for the currency, or the feed is unreachable, the API returns a field error on Rate, for example "No NBR rate for this currency. Enter the rate you paid." (BR-04).
 - The rate field is hidden when the currency is RON (BR-06).
 - When editing, changing the date or currency clears a manual rate so it is looked up again (BR-02). Changing only the amount keeps the saved rate (BR-05).

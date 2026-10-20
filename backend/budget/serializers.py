@@ -4,14 +4,15 @@ from decimal import Decimal
 from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
 
-from budget.conversion import convert
+from budget.conversion import UNCHANGED, convert
 from budget.models import AMOUNT, RATE, Expense
 from core.serializers import ModelCleanMixin
 
 
 class ExpenseSerializer(ModelCleanMixin, serializers.ModelSerializer):
-    """An expense in its own currency (US-11). An empty `rate` means "use the NBR rate"; the
-    rate, its source and the RON amount are filled in on save (ADR 0003)."""
+    """An expense in its own currency (US-11). A `rate` is the one the author paid; null means
+    "use the NBR rate", and leaving it out keeps the saved one. The rate, its source and the RON
+    amount are set on save by `convert()` (ADR 0003, US-12)."""
 
     amount = serializers.DecimalField(**AMOUNT)
     currency = serializers.RegexField(
@@ -48,12 +49,12 @@ class ExpenseSerializer(ModelCleanMixin, serializers.ModelSerializer):
 
     def validate(self, attrs):
         attrs = super().validate(attrs)
-        rate = attrs.pop("rate", None)
+        rate = attrs.pop("rate", UNCHANGED)
         expense = copy.copy(self.instance) if self.instance else Expense()
         for field, value in attrs.items():
             setattr(expense, field, value)
         try:
-            convert(expense, rate)
+            convert(expense, rate, previous=self.instance)
         except DjangoValidationError as error:
             raise serializers.ValidationError(serializers.as_serializer_error(error)) from error
         return {
