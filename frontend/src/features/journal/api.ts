@@ -56,9 +56,66 @@ export function useUpdateEntry(tripId: number) {
 }
 
 export function useDeleteEntry(tripId: number) {
+  const queryClient = useQueryClient();
   const entriesChanged = useEntriesChanged(tripId);
   return useMutation({
     mutationFn: (entryId: number) => api.delete(`/journal-entries/${entryId}/`),
-    onSuccess: entriesChanged,
+    // The entry's photos are deleted with it (BR-11).
+    onSuccess: () =>
+      Promise.all([
+        entriesChanged(),
+        queryClient.invalidateQueries({ queryKey: photoKeys.list(tripId) }),
+      ]),
   });
+}
+
+/** `GET /api/photos/?trip={id}`, in upload order. `thumbnail` is the smaller copy for galleries
+ * (US-08). */
+export interface Photo {
+  id: number;
+  trip: number;
+  journal_entry: number | null;
+  image: string;
+  thumbnail: string;
+  caption: string;
+  created_at: string;
+}
+
+export interface PhotoInput {
+  image: File;
+  caption: string;
+  journal_entry: number | null;
+}
+
+export const photoKeys = {
+  list: (tripId: number) => ['photos', tripId] as const,
+};
+
+export function usePhotos(tripId: number) {
+  return useQuery({
+    queryKey: photoKeys.list(tripId),
+    queryFn: () => api.get<Photo[]>(`/photos/?trip=${tripId}`),
+  });
+}
+
+/** One photo per request, so each file is accepted or refused on its own. The gallery is
+ * refreshed by the caller once the batch is done. */
+export function useUploadPhoto(tripId: number) {
+  return useMutation({
+    mutationFn: ({ image, caption, journal_entry }: PhotoInput) => {
+      const form = new FormData();
+      form.append('trip', String(tripId));
+      form.append('image', image);
+      form.append('caption', caption);
+      if (journal_entry !== null) {
+        form.append('journal_entry', String(journal_entry));
+      }
+      return api.post<Photo>('/photos/', form);
+    },
+  });
+}
+
+export function usePhotosChanged(tripId: number) {
+  const queryClient = useQueryClient();
+  return () => queryClient.invalidateQueries({ queryKey: photoKeys.list(tripId) });
 }

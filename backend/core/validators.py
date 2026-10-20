@@ -3,6 +3,7 @@ from PIL import Image, UnidentifiedImageError
 
 # The proposed answer to #26, used until the owner decides otherwise.
 MAX_PHOTO_BYTES = 10 * 1024 * 1024
+MAX_PHOTOS_PER_TRIP = 50
 
 
 def validate_jpeg(file) -> None:

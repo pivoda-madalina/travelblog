@@ -29,6 +29,10 @@ Object.defineProperty(document, 'fonts', {
   value: { addEventListener: () => {}, removeEventListener: () => {} },
 });
 
+// Previews of chosen photos use object URLs.
+URL.createObjectURL = () => 'blob:preview';
+URL.revokeObjectURL = () => {};
+
 // Tests that mock fetch with vi.stubGlobal() get the real one back afterwards.
 afterEach(() => {
   vi.unstubAllGlobals();
