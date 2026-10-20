@@ -209,3 +209,54 @@ test('the author deletes an entry after a warning about its photos', async () =>
   expect(await screen.findByText('Entry deleted.')).toBeInTheDocument();
   expect(wasRequested(fetchMock, 'DELETE', '/journal-entries/1/')).toBe(true);
 });
+
+function photo(id: number, caption: string, journalEntry: number | null) {
+  return {
+    id,
+    trip: 7,
+    journal_entry: journalEntry,
+    image: `/media/photos/${id}.jpg`,
+    thumbnail: `/media/photos/thumbnails/${id}.jpg`,
+    caption,
+    created_at: '2026-10-20T10:00:00Z',
+  };
+}
+
+test('each entry shows its attached photos, which open in the viewer', async () => {
+  mockApi({
+    'GET /auth/me/': visitor,
+    'GET /trips/7/': trip,
+    [ENTRIES]: [arrival, evening],
+    'GET /photos/?trip=7': [
+      photo(1, 'Landing', 1),
+      photo(2, 'Gallery only', null),
+      photo(3, 'Tiber at night', 2),
+      photo(4, 'Gelato', 1),
+    ],
+  });
+  const user = userEvent.setup();
+  renderRoute('/trips/7/journal');
+
+  const first = (await screen.findByRole('heading', { name: 'Arrival in Rome' })).closest(
+    'article',
+  ) as HTMLElement;
+  await within(first).findByRole('img', { name: 'Landing' });
+  expect(
+    within(first)
+      .getAllByRole('img')
+      .map((image) => image.getAttribute('alt')),
+  ).toEqual(['Landing', 'Gelato']);
+  const second = screen
+    .getByRole('heading', { name: 'Evening walk' })
+    .closest('article') as HTMLElement;
+  expect(
+    within(second)
+      .getAllByRole('img')
+      .map((image) => image.getAttribute('alt')),
+  ).toEqual(['Tiber at night']);
+  expect(screen.queryByRole('img', { name: 'Gallery only' })).not.toBeInTheDocument();
+
+  // The viewer moves between the entry's own photos.
+  await user.click(within(first).getByRole('button', { name: 'Open Landing' }));
+  expect(await screen.findByRole('dialog', { name: 'Landing · 1 / 2' })).toBeInTheDocument();
+});
