@@ -118,6 +118,22 @@ def test_seed_draft_hidden_from_visitors(seed):
     assert len(titles) == 3
 
 
+def test_seed_trips_list_starts_with_rome(seed, django_capture_on_commit_callbacks):
+    for _ in range(2):
+        with django_capture_on_commit_callbacks(execute=True):
+            seed()
+        author = APIClient()
+        author.force_login(get_user_model().objects.get())
+
+        author_titles = [trip["title"] for trip in author.get(reverse("trip-list")).json()]
+        visitor_titles = [trip["title"] for trip in APIClient().get(reverse("trip-list")).json()]
+
+        assert author_titles == [trip.title for trip in data.TRIPS]
+        assert visitor_titles == [
+            trip.title for trip in data.TRIPS if trip.status == Trip.Status.PUBLISHED
+        ]
+
+
 def test_seed_is_repeatable(seed, django_capture_on_commit_callbacks):
     with django_capture_on_commit_callbacks(execute=True):
         seed()

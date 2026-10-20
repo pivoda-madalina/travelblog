@@ -34,7 +34,10 @@ def seed_trips() -> list[Trip]:
     # One by one, so the delete signals remove each trip's files (BR-11).
     for trip in Trip.objects.filter(title__in=titles):
         trip.delete()
-    return [_create_trip(trip_data) for trip_data in data.TRIPS]
+    # The trips list shows the newest first (US-01), so the first trip of TRIPS is created last
+    # and opens the list.
+    created = [_create_trip(trip_data) for trip_data in reversed(data.TRIPS)]
+    return created[::-1]
 
 
 def _create_trip(trip_data: data.TripData) -> Trip:
