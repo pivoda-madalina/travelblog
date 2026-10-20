@@ -14,10 +14,8 @@ import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { isNotEmpty, useForm } from '@mantine/form';
 
 import { ApiError } from '../../api/client';
+import { MAX_PHOTO_BYTES } from '../../lib/photos';
 import type { Trip, TripInput, TripStatus } from './api';
-
-// The proposed answer to #26; the backend checks the same limits.
-const MAX_PHOTO_BYTES = 10 * 1024 * 1024;
 
 interface TripFormValues {
   title: string;

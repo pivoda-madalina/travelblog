@@ -1,6 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 
+from core.validators import MAX_PHOTOS_PER_TRIP, validate_jpeg
+from journal.thumbnails import make_thumbnail
 from trips.models import format_date
 
 
@@ -38,12 +40,15 @@ class JournalEntry(models.Model):
 
 
 class Photo(models.Model):
+    """A photo in its trip's gallery, optionally attached to one of the trip's journal entries
+    (US-08). The thumbnail is made from the image on the first save."""
+
     trip = models.ForeignKey("trips.Trip", on_delete=models.CASCADE, related_name="photos")
     # CASCADE: deleting a journal entry deletes its photos (BR-11).
     journal_entry = models.ForeignKey(
         JournalEntry, on_delete=models.CASCADE, null=True, blank=True, related_name="photos"
     )
-    image = models.ImageField(upload_to="photos/")
+    image = models.ImageField(upload_to="photos/", validators=[validate_jpeg])
     thumbnail = models.ImageField(upload_to="photos/thumbnails/", blank=True)
     caption = models.CharField(max_length=300, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -53,3 +58,21 @@ class Photo(models.Model):
 
     def __str__(self) -> str:
         return self.caption or self.image.name
+
+    def save(self, *args, **kwargs):
+        if self.image and not self.thumbnail:
+            thumbnail = make_thumbnail(self.image)
+            self.thumbnail.save(thumbnail.name, thumbnail, save=False)
+        super().save(*args, **kwargs)
+
+    def clean(self):
+        if self.trip_id is None:
+            return
+        errors = {}
+        if self.journal_entry is not None and self.journal_entry.trip_id != self.trip_id:
+            errors["journal_entry"] = "Choose an entry of this trip's journal."
+        # The proposed answer to #26, used until the owner decides otherwise.
+        if self.pk is None and self.trip.photos.count() >= MAX_PHOTOS_PER_TRIP:
+            errors["image"] = f"A trip can have at most {MAX_PHOTOS_PER_TRIP} photos."
+        if errors:
+            raise ValidationError(errors)

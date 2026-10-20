@@ -35,5 +35,6 @@ def test_journal_entry_and_photo_names():
     assert str(photo) == photo.image.name
 
 
-def test_entry_without_a_trip_is_left_to_field_validation():
+def test_entry_and_photo_without_a_trip_are_left_to_field_validation():
     JournalEntry(title="Arrival").clean()
+    Photo(caption="Colosseum").clean()
