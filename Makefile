@@ -26,7 +26,8 @@ lint:
 	$(COMPOSE) run --rm --no-deps backend sh -c "ruff check . && ruff format --check ."
 	$(FRONTEND) sh -c "npm run lint && npm run typecheck && npm run format:check"
 
-# Load the sample trips. The seed command arrives with #22.
+# Load the sample trips and the author account from SEED_AUTHOR_USERNAME and
+# SEED_AUTHOR_PASSWORD. Running it again replaces the sample trips and leaves other trips alone.
 seed:
 	$(BACKEND) python manage.py seed
 

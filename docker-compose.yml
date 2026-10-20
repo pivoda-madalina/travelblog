@@ -32,6 +32,9 @@ services:
       POSTGRES_HOST: db
       POSTGRES_PORT: "5432"
       NOMINATIM_USER_AGENT: ${NOMINATIM_USER_AGENT:-travelblog/0.1 (portfolio project)}
+      # The author account `make seed` creates. The password has no default on purpose.
+      SEED_AUTHOR_USERNAME: ${SEED_AUTHOR_USERNAME:-author}
+      SEED_AUTHOR_PASSWORD: ${SEED_AUTHOR_PASSWORD:-}
     ports:
       - "8000:8000"
     volumes:

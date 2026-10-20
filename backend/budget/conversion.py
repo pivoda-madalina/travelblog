@@ -48,8 +48,12 @@ def convert(
         if result.rate is None:
             raise ValidationError({"rate": result.message})
         expense.rate, expense.rate_source = result.rate, RateSource.NBR
-    # Rounded to the cent, half up; totals add up these rounded amounts (BR-07).
-    expense.amount_ron = (expense.amount * expense.rate).quantize(CENT, rounding=ROUND_HALF_UP)
+    expense.amount_ron = to_ron(expense.amount, expense.rate)
+
+
+def to_ron(amount: Decimal, rate: Decimal) -> Decimal:
+    """Rounded to the cent, half up; totals add up these rounded amounts (BR-07)."""
+    return (amount * rate).quantize(CENT, rounding=ROUND_HALF_UP)
 
 
 def _keeps_saved_rate(previous: Expense | None, expense: Expense, *, cleared: bool) -> bool:
