@@ -1,4 +1,4 @@
-import { formatRon } from './money';
+import { formatRate, formatRon } from './money';
 
 test.each([
   ['0', '0.00 RON'],
@@ -10,4 +10,15 @@ test.each([
   ['-412.30', '-412.30 RON'],
 ])('%s is shown as %s', (amount, shown) => {
   expect(formatRon(amount)).toBe(shown);
+});
+
+test.each([
+  ['4.975000', '4.9750'],
+  ['4.976400', '4.9764'],
+  ['0.030125', '0.030125'],
+  ['0.000175', '0.000175'],
+  ['1.000000', '1.0000'],
+  ['5', '5.0000'],
+])('the rate %s is shown as %s', (rate, shown) => {
+  expect(formatRate(rate)).toBe(shown);
 });

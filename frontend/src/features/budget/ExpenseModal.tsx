@@ -5,6 +5,8 @@ import { notifications } from '@mantine/notifications';
 import { useState } from 'react';
 
 import { ApiError } from '../../api/client';
+import { formatDate } from '../../lib/dates';
+import { formatRate } from '../../lib/money';
 import type { Trip } from '../trips/api';
 import {
   type Category,
@@ -12,6 +14,7 @@ import {
   type Expense,
   useAddExpense,
   useDeleteExpense,
+  useNbrRate,
   useUpdateExpense,
 } from './api';
 import { currencyOptions } from './currencies';
@@ -75,8 +78,22 @@ function ExpenseForm({ trip, expense, onClose }: ExpenseFormProps) {
       amount: isNotEmpty('Enter the amount.'),
       currency: matches(/^[A-Z]{3}$/, 'Enter a three-letter currency code, for example EUR.'),
     },
+    // A typed rate belongs to its date and currency, so it is cleared when either changes and
+    // the rate is looked up again (BR-02).
+    onValuesChange: (values, previous) => {
+      const moved = values.date !== previous.date || values.currency !== previous.currency;
+      if (moved && values.rate !== '') {
+        form.setFieldValue('rate', '');
+      }
+    },
   });
-  const currency = form.getValues().currency;
+  const { date, currency } = form.getValues();
+  // An NBR rate already saved is kept while the date and currency stay the same (BR-05).
+  const savedNbrRate =
+    expense?.rate_source === 'nbr' && expense.date === date && expense.currency === currency
+      ? expense.rate
+      : null;
+  const nbrRate = useNbrRate(currency, savedNbrRate === null ? date : null);
 
   if (expense && confirmingDelete) {
     return (
@@ -169,7 +186,7 @@ function ExpenseForm({ trip, expense, onClose }: ExpenseFormProps) {
             inputMode="decimal"
             rightSection={<Text size="sm">RON per 1 {currency}</Text>}
             rightSectionWidth={120}
-            description="Leave empty to use the NBR rate for the date. Enter the rate from your bank statement to override it."
+            {...rateHint(savedNbrRate, date === null ? undefined : nbrRate)}
             key={form.key('rate')}
             {...form.getInputProps('rate')}
           />
@@ -194,6 +211,41 @@ function ExpenseForm({ trip, expense, onClose }: ExpenseFormProps) {
       </Stack>
     </form>
   );
+}
+
+/** What the rate field says about the rate used if it is left empty (US-12). */
+function rateHint(
+  savedNbrRate: string | null,
+  nbrRate: ReturnType<typeof useNbrRate> | undefined,
+): { placeholder?: string; description: string; withAsterisk?: boolean } {
+  const override = 'or enter the rate from your bank statement.';
+  if (savedNbrRate !== null) {
+    return {
+      placeholder: formatRate(savedNbrRate),
+      description: `The saved NBR rate. Leave empty to keep it, ${override}`,
+    };
+  }
+  if (nbrRate === undefined || !nbrRate.isEnabled) {
+    return {
+      description: `Leave empty to use the NBR rate for the date, ${override}`,
+    };
+  }
+  if (nbrRate.isPending) {
+    return { placeholder: 'Looking up the NBR rate…', description: '' };
+  }
+  if (nbrRate.data?.rate && nbrRate.data.rate_date) {
+    return {
+      placeholder: formatRate(nbrRate.data.rate),
+      description: `NBR rate of ${formatDate(nbrRate.data.rate_date)}. Leave empty to use it, ${override}`,
+    };
+  }
+  if (nbrRate.data) {
+    // No NBR rate for this currency, so the author must enter one (BR-04).
+    return { description: nbrRate.data.detail, withAsterisk: true };
+  }
+  return {
+    description: `Couldn’t look up the NBR rate. Leave empty to try again on save, ${override}`,
+  };
 }
 
 interface DeleteExpenseProps {

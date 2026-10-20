@@ -227,12 +227,32 @@ def test_author_edits_an_expense(author, trip, nbr):
     assert (expense.description, expense.category) == ("Taxi", "transport")
 
 
-def test_editing_the_amount_converts_it_again(author, trip):
-    expense = ExpenseFactory(trip=trip, date=day(13))
+def test_br05_editing_the_amount_keeps_the_saved_rate(author, trip, nbr):
+    expense = ExpenseFactory(trip=trip, date=day(13), rate=Decimal("5.000000"))
 
-    response = author.patch(detail(expense), {"amount": "50.00"}, format="json")
+    response = author.patch(detail(expense), {"amount": "50.00", "rate": None}, format="json")
 
-    assert response.json()["amount_ron"] == "248.82"
+    assert response.json()["rate"] == "5.000000"
+    assert response.json()["amount_ron"] == "250.00"
+    assert nbr == []
+
+
+def test_br02_editing_the_date_looks_the_rate_up_again(author, trip, nbr):
+    expense = ExpenseFactory(trip=trip, date=day(13), rate=Decimal("5.000000"))
+
+    response = author.patch(detail(expense), {"date": "2026-05-14", "rate": None}, format="json")
+
+    assert response.json()["rate"] == "4.976400"
+    assert nbr == [("EUR", day(14))]
+
+
+def test_br04_a_manual_rate_left_out_of_an_edit_is_kept(author, trip):
+    expense = ExpenseFactory(trip=trip, rate=Decimal("5.100000"), rate_source=RateSource.MANUAL)
+
+    response = author.patch(detail(expense), {"description": "Hotel"}, format="json")
+
+    assert response.json()["rate"] == "5.100000"
+    assert response.json()["rate_source"] == "manual"
 
 
 def test_edit_is_validated_too(author, trip):

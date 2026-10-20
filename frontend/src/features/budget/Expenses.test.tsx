@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { mockApi, wasRequested } from '../../test/mockApi';
@@ -51,16 +51,49 @@ function body(init: RequestInit): unknown {
   return JSON.parse(init.body as string);
 }
 
-test('the expenses are listed with their category and amount', async () => {
-  mockApi({ 'GET /auth/me/': author, 'GET /trips/7/': trip, [EXPENSES]: [hotel, tickets] });
+const taxi = {
+  id: 3,
+  trip: 7,
+  date: '2026-05-13',
+  description: 'Taxi to airport',
+  category: 'transport',
+  amount: '120.00',
+  currency: 'RON',
+  rate: '1.000000',
+  rate_source: 'nbr',
+  amount_ron: '120.00',
+};
+
+function row(description: string): HTMLElement {
+  return screen.getByText(description).closest('tr') as HTMLElement;
+}
+
+test('each expense shows its amount, the rate used and the RON amount', async () => {
+  mockApi({
+    'GET /auth/me/': author,
+    'GET /trips/7/': trip,
+    [EXPENSES]: [hotel, tickets, taxi],
+  });
 
   renderRoute('/trips/7/budget');
 
-  const row = (await screen.findByText('Hotel Trastevere')).closest('tr') as HTMLElement;
-  expect(within(row).getByText('12 May 2026')).toBeInTheDocument();
-  expect(within(row).getByText('Accommodation')).toBeInTheDocument();
-  expect(within(row).getByText('1,480.00 EUR')).toBeInTheDocument();
-  expect(screen.getByText('Vatican tickets')).toBeInTheDocument();
+  await screen.findByText('Hotel Trastevere');
+  const hotelRow = within(row('Hotel Trastevere'));
+  expect(hotelRow.getByText('12 May 2026')).toBeInTheDocument();
+  expect(hotelRow.getByText('Accommodation')).toBeInTheDocument();
+  expect(hotelRow.getByText('1,480.00 EUR')).toBeInTheDocument();
+  expect(hotelRow.getByText('4.9750')).toBeInTheDocument();
+  expect(hotelRow.getByText('NBR')).toBeInTheDocument();
+  expect(hotelRow.getByText('7,363.00 RON')).toBeInTheDocument();
+  const ticketsRow = within(row('Vatican tickets'));
+  expect(ticketsRow.getByText('4.9802')).toBeInTheDocument();
+  expect(ticketsRow.getByText('Manual')).toBeInTheDocument();
+  expect(ticketsRow.getByText('298.81 RON')).toBeInTheDocument();
+  // RON is not converted (BR-06).
+  const taxiRow = within(row('Taxi to airport'));
+  expect(taxiRow.getByText('-')).toBeInTheDocument();
+  expect(taxiRow.queryByText('NBR')).not.toBeInTheDocument();
+  expect(taxiRow.getAllByText('120.00 RON')).toHaveLength(2);
 });
 
 test('without expenses the tab says so', async () => {
@@ -77,6 +110,13 @@ test('the author adds an expense in another currency', async () => {
     'GET /auth/me/': author,
     'GET /trips/7/': trip,
     [EXPENSES]: [],
+    'GET /rates/?currency=EUR&date=2026-05-13': {
+      currency: 'EUR',
+      date: '2026-05-13',
+      rate: '4.975000',
+      rate_date: '2026-05-12',
+      detail: '',
+    },
     'POST /expenses/': (init) => {
       sent = body(init);
       return Response.json(tickets, { status: 201 });
@@ -96,6 +136,10 @@ test('the author adds an expense in another currency', async () => {
   const currency = within(modal).getByRole('combobox', { name: /Currency/ });
   await user.clear(currency);
   await user.type(currency, 'eur');
+  // The suggested rate appears as soon as the date and currency are chosen (US-12).
+  const rate = within(modal).getByLabelText(/Rate/);
+  await waitFor(() => expect(rate).toHaveAttribute('placeholder', '4.9750'));
+  expect(within(modal).getByText(/^NBR rate of 12 May 2026\./)).toBeInTheDocument();
   await user.click(within(modal).getByRole('button', { name: 'Save' }));
 
   expect(await screen.findByText('Expense saved.')).toBeInTheDocument();
@@ -143,16 +187,90 @@ test('the rate field is hidden for RON and sent when typed', async () => {
   expect(within(again).queryByLabelText(/Rate/)).not.toBeInTheDocument();
 });
 
-test('an NBR rate is not shown in the form, so the NBR is asked again', async () => {
-  mockApi({ 'GET /auth/me/': author, 'GET /trips/7/': trip, [EXPENSES]: [hotel] });
+test('a saved NBR rate is kept while the date and currency stay the same', async () => {
+  let sent: unknown;
+  const fetchMock = mockApi({
+    'GET /auth/me/': author,
+    'GET /trips/7/': trip,
+    [EXPENSES]: [hotel],
+    'PATCH /expenses/1/': (init) => {
+      sent = body(init);
+      return hotel;
+    },
+  });
   const user = userEvent.setup();
   renderRoute('/trips/7/budget');
 
   await user.click(await screen.findByText('Hotel Trastevere'));
   const modal = await screen.findByRole('dialog', { name: 'Edit expense' });
+  const rate = within(modal).getByLabelText(/Rate/);
+  expect(rate).toHaveValue('');
+  expect(rate).toHaveAttribute('placeholder', '4.9750');
+  expect(within(modal).getByText(/^The saved NBR rate\./)).toBeInTheDocument();
+  const amount = within(modal).getByLabelText(/Amount/);
+  await user.clear(amount);
+  await user.type(amount, '1500');
+  await user.click(within(modal).getByRole('button', { name: 'Save' }));
 
-  expect(within(modal).getByLabelText(/Rate/)).toHaveValue('');
-  expect(within(modal).getByLabelText(/Amount/)).toHaveValue('1480.00');
+  expect(await screen.findByText('Expense saved.')).toBeInTheDocument();
+  expect(sent).toMatchObject({ amount: '1500', rate: null });
+  const askedNbr = fetchMock.mock.calls.some(([input]) => String(input).startsWith('/api/rates/'));
+  expect(askedNbr).toBe(false);
+});
+
+test('changing the date clears a typed rate and looks the NBR rate up again', async () => {
+  mockApi({
+    'GET /auth/me/': author,
+    'GET /trips/7/': trip,
+    [EXPENSES]: [tickets],
+    'GET /rates/?currency=EUR&date=2026-05-14': {
+      currency: 'EUR',
+      date: '2026-05-14',
+      rate: '4.981100',
+      rate_date: '2026-05-14',
+      detail: '',
+    },
+  });
+  const user = userEvent.setup();
+  renderRoute('/trips/7/budget');
+
+  await user.click(await screen.findByText('Vatican tickets'));
+  const modal = await screen.findByRole('dialog', { name: 'Edit expense' });
+  const rate = within(modal).getByLabelText(/Rate/);
+  expect(rate).toHaveValue('4.980200');
+  await user.click(within(modal).getByRole('button', { name: /Date/ }));
+  await user.click(screen.getByRole('button', { name: '14 May 2026' }));
+
+  expect(rate).toHaveValue('');
+  await waitFor(() => expect(rate).toHaveAttribute('placeholder', '4.9811'));
+});
+
+test('without an NBR rate for the currency the author is asked for one', async () => {
+  const detail = 'The National Bank of Romania publishes no rate for VND. Enter the rate paid.';
+  mockApi({
+    'GET /auth/me/': author,
+    'GET /trips/7/': trip,
+    [EXPENSES]: [],
+    'GET /rates/?currency=VND&date=2026-05-13': {
+      currency: 'VND',
+      date: '2026-05-13',
+      rate: null,
+      rate_date: null,
+      detail,
+    },
+  });
+  const user = userEvent.setup();
+  renderRoute('/trips/7/budget');
+
+  await user.click(await screen.findByRole('button', { name: '+ Add expense' }));
+  const modal = await screen.findByRole('dialog', { name: 'Add expense' });
+  await user.click(within(modal).getByRole('button', { name: /Date/ }));
+  await user.click(screen.getByRole('button', { name: '13 May 2026' }));
+  const currency = within(modal).getByRole('combobox', { name: /Currency/ });
+  await user.clear(currency);
+  await user.type(currency, 'VND');
+
+  expect(await within(modal).findByText(detail)).toBeInTheDocument();
 });
 
 test('errors from the API appear under their fields', async () => {

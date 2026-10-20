@@ -43,6 +43,27 @@ export const categoryOptions = Object.entries(categories).map(([value, label]) =
   label,
 }));
 
+/** `GET /api/rates/`: the NBR rate for a currency and date, or the most recent earlier one
+ * (`rate_date`). Without a rate, `detail` says why (BR-03, BR-04). */
+export interface NbrRate {
+  currency: string;
+  date: string;
+  rate: string | null;
+  rate_date: string | null;
+  detail: string;
+}
+
+/** The rate the API will use if the author leaves the rate empty (BR-02). Looked up once the
+ * date and a full currency code other than RON are chosen. */
+export function useNbrRate(currency: string, date: string | null) {
+  return useQuery({
+    queryKey: ['rates', currency, date],
+    queryFn: () => api.get<NbrRate>(`/rates/?currency=${currency}&date=${date}`),
+    enabled: date !== null && /^[A-Z]{3}$/.test(currency) && currency !== 'RON',
+    staleTime: Infinity,
+  });
+}
+
 export const expenseKeys = {
   list: (tripId: number) => ['expenses', tripId] as const,
 };
