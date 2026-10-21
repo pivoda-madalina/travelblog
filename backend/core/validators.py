@@ -1,9 +1,9 @@
 from django.core.exceptions import ValidationError
 from PIL import Image, UnidentifiedImageError
 
-# The proposed answer to #26, used until the owner decides otherwise.
+# The limits the owner agreed in #26.
 MAX_PHOTO_BYTES = 10 * 1024 * 1024
-MAX_PHOTOS_PER_TRIP = 50
+MAX_PHOTOS_PER_TRIP = 10
 
 
 def validate_jpeg(file) -> None:

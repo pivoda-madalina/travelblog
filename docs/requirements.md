@@ -118,7 +118,7 @@ A place is one city-level stop on a trip, for example "Rome, Italy, 12 May".
    - A live preview shows the formatted text while writing.
    - A day can have several entries.
 8. **US-08** As the author, I want to upload several photos at once with captions to the trip's gallery, optionally attached to a journal entry, so that the story has pictures.
-   - Only JPEG files are accepted, up to a size limit still to be agreed.
+   - Only JPEG files of at most 10 MB are accepted, and a trip has at most 10 photos.
    - Every photo belongs to a trip and appears in that trip's gallery.
    - Deleting a journal entry also deletes the photos attached to it.
    - Smaller preview images are shown in galleries so pages load quickly.

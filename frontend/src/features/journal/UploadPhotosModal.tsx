@@ -150,7 +150,7 @@ function UploadForm({ trip, onClose }: Omit<UploadPhotosModalProps, 'opened'>) {
         onReject={(rejections) => setRejected(rejections.map(rejectionReason))}
       >
         <Text ta="center" c="dimmed" py="md">
-          Drop JPEG files here or browse (max 10 MB each)
+          Drop JPEG files here or browse (max 10 MB each, 10 photos per trip)
         </Text>
       </Dropzone>
       {rejected.map((reason) => (
