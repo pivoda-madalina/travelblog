@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from trips.models import format_date
+from trips.models import Trip, format_date
 
 # Amounts are in their own currency with 2 decimal places; rates are RON per 1 unit with 6.
 AMOUNT = {"max_digits": 12, "decimal_places": 2}
@@ -56,13 +56,21 @@ class Expense(models.Model):
         return f"{self.description}: {self.amount} {self.currency}"
 
     def clean(self):
-        # Expenses may be paid before the trip starts, for example flights booked in advance,
-        # but not after it ends (#27).
+        # A draft trip may have expenses paid before it starts, for example flights booked in
+        # advance; a published trip may not (#27). No trip has expenses after it ends.
         if self.trip_id is None or self.date is None:
             return
         if self.date > self.trip.end_date:
             end = format_date(self.trip.end_date)
             raise ValidationError({"date": f"The date cannot be after the trip ends, {end}."})
+        if self.date < self.trip.start_date and self.trip.status != Trip.Status.DRAFT:
+            start = format_date(self.trip.start_date)
+            raise ValidationError(
+                {
+                    "date": f"The date cannot be before the trip starts, {start}. "
+                    "Only a draft trip can have expenses paid in advance."
+                }
+            )
 
 
 class ExchangeRate(models.Model):

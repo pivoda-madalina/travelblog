@@ -1,6 +1,6 @@
 """US-11: the author records, edits and deletes a trip's expenses. BR-08: the fixed categories.
-BR-14: visitors cannot see or change expenses. Expenses may predate the trip but not follow it
-(#27)."""
+BR-14: visitors cannot see or change expenses. Expenses never follow the trip, and predate it only
+while the trip is a draft (#27)."""
 
 import datetime
 from decimal import Decimal
@@ -15,6 +15,7 @@ from budget.models import Expense, RateSource
 from budget.rates import RateResult
 from budget.tests.factories import ExpenseFactory
 from core.tests.factories import UserFactory
+from trips.models import Trip
 from trips.tests.factories import TripFactory
 
 pytestmark = pytest.mark.django_db
@@ -171,9 +172,29 @@ def test_expense_dated_after_the_trip_is_refused(author, trip):
     assert response.json() == {"date": ["The date cannot be after the trip ends, 20 May 2026."]}
 
 
-@pytest.mark.parametrize("date", [day(1), day(12), day(20)])
-def test_expense_may_be_dated_before_or_during_the_trip(trip, date):
+@pytest.mark.parametrize("date", [day(12), day(20)])
+def test_expense_may_be_dated_during_the_trip(trip, date):
     ExpenseFactory.build(trip=trip, date=date).clean()
+
+
+def test_expense_dated_before_a_published_trip_is_refused(author, trip):
+    response = author.post(LIST, expense_data(trip, date="2026-05-11"), format="json")
+
+    assert response.status_code == 400
+    assert response.json() == {
+        "date": [
+            "The date cannot be before the trip starts, 12 May 2026. "
+            "Only a draft trip can have expenses paid in advance."
+        ]
+    }
+
+
+def test_expense_may_be_dated_before_a_draft_trip(author):
+    draft = TripFactory(start_date=day(12), end_date=day(20), status=Trip.Status.DRAFT)
+
+    response = author.post(LIST, expense_data(draft, date="2026-03-02"), format="json")
+
+    assert response.status_code == 201
 
 
 def test_expense_without_trip_or_date_is_left_to_the_required_field_errors():
@@ -192,11 +213,42 @@ def test_trip_end_cannot_move_before_an_expense(trip):
     }
 
 
-def test_trip_start_can_move_after_an_expense(trip):
-    ExpenseFactory(trip=trip, date=day(10))
+def test_draft_trip_start_can_move_after_an_expense(trip):
+    trip.status = Trip.Status.DRAFT
+    trip.save()
+    ExpenseFactory(trip=trip, date=day(13))
     trip.start_date = day(14)
 
     trip.clean()
+
+
+def test_published_trip_start_cannot_move_after_an_expense(trip):
+    ExpenseFactory(trip=trip, date=day(13))
+    trip.start_date = day(14)
+
+    with pytest.raises(ValidationError) as error:
+        trip.clean()
+
+    assert error.value.message_dict == {
+        "start_date": [
+            "An expense is dated 13 May 2026, before this start date. Only a draft trip can "
+            "have expenses paid in advance: change its date first, or keep the trip a draft."
+        ]
+    }
+
+
+def test_draft_with_expenses_paid_in_advance_cannot_be_published(author):
+    draft = TripFactory(start_date=day(12), end_date=day(20), status=Trip.Status.DRAFT)
+    ExpenseFactory(trip=draft, date=day(2))
+
+    response = author.patch(
+        reverse("trip-detail", args=[draft.pk]), {"status": "published"}, format="json"
+    )
+
+    assert response.status_code == 400
+    assert response.json()["start_date"][0].startswith("An expense is dated 2 May 2026")
+    draft.refresh_from_db()
+    assert draft.status == Trip.Status.DRAFT
 
 
 def test_author_lists_a_trips_expenses_by_date(author, trip):
