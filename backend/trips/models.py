@@ -106,12 +106,25 @@ class Trip(models.Model):
                 f"A place or journal entry is dated {format_date(max(dates))}, after this "
                 "end date. Change its date first."
             )
-        # Expenses may come before the trip but not after it (#27).
-        last_expense = self.expenses.order_by("-date").values_list("date", flat=True).first()
+        # Expenses never come after the trip, and come before it only while it is a draft (#27).
+        expense_dates = self.expenses.values_list("date", flat=True)
+        last_expense = expense_dates.order_by("-date").first()
         if "end_date" not in errors and last_expense and last_expense > self.end_date:
             errors["end_date"] = (
                 f"An expense is dated {format_date(last_expense)}, after this end date. "
                 "Change its date first."
+            )
+        first_expense = expense_dates.order_by("date").first()
+        if (
+            "start_date" not in errors
+            and self.status != self.Status.DRAFT
+            and first_expense
+            and first_expense < self.start_date
+        ):
+            errors["start_date"] = (
+                f"An expense is dated {format_date(first_expense)}, before this start date. "
+                "Only a draft trip can have expenses paid in advance: change its date first, "
+                "or keep the trip a draft."
             )
         if errors:
             raise ValidationError(errors)

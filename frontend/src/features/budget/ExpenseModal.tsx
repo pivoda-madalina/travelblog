@@ -142,6 +142,8 @@ function ExpenseForm({ trip, expense, onClose }: ExpenseFormProps) {
           placeholder="Date paid"
           valueFormat="D MMM YYYY"
           withAsterisk
+          // Only a draft can have expenses paid before the trip starts (#27).
+          minDate={trip.status === 'draft' ? undefined : trip.start_date}
           maxDate={trip.end_date}
           defaultDate={trip.start_date}
           key={form.key('date')}

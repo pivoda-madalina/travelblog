@@ -154,8 +154,7 @@ ROME_TRIP = TripData(
     ),
     gallery=(PhotoData("ferry.jpg", "Ferry to Amalfi", "sea"),),
     expenses=(
-        # Booked in advance, before the trip starts (#27).
-        ExpenseData(day(2026, 3, 2), "Flights Bucharest to Rome", Category.TRANSPORT, "1450.00"),
+        ExpenseData(day(2026, 5, 12), "Flights Bucharest to Rome", Category.TRANSPORT, "1450.00"),
         ExpenseData(
             day(2026, 5, 12), "Hotel in Trastevere", Category.ACCOMMODATION, "640.00", "EUR"
         ),
@@ -208,7 +207,7 @@ BUDAPEST_TRIP = TripData(
         PhotoData("chain-bridge.jpg", "Chain Bridge", "dusk"),
     ),
     expenses=(
-        ExpenseData(day(2026, 8, 1), "Flights Bucharest to Budapest", Category.TRANSPORT, "820.00"),
+        ExpenseData(day(2026, 9, 3), "Flights Bucharest to Budapest", Category.TRANSPORT, "820.00"),
         ExpenseData(day(2026, 9, 3), "Hotel by the river", Category.ACCOMMODATION, "96000", "HUF"),
         ExpenseData(day(2026, 9, 4), "Széchenyi baths", Category.ACTIVITIES, "22000", "HUF"),
         ExpenseData(day(2026, 9, 5), "Food and drinks", Category.FOOD_AND_DRINKS, "38500", "HUF"),
@@ -230,9 +229,9 @@ LISBON_TRIP = TripData(
         PlaceData(PORTO, day(2027, 2, 19)),
     ),
     expenses=(
-        ExpenseData(day(2026, 10, 1), "Flights Bucharest to Lisbon", Category.TRANSPORT, "1180.00"),
+        ExpenseData(day(2027, 2, 14), "Flights Bucharest to Lisbon", Category.TRANSPORT, "1180.00"),
         ExpenseData(
-            day(2026, 10, 1), "Hotel deposit in Porto", Category.ACCOMMODATION, "120.00", "EUR"
+            day(2027, 2, 14), "Hotel deposit in Porto", Category.ACCOMMODATION, "120.00", "EUR"
         ),
     ),
 )

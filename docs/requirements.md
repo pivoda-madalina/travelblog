@@ -132,6 +132,7 @@ A place is one city-level stop on a trip, for example "Rome, Italy, 12 May".
     - It can be zero or more.
 11. **US-11** As the author, I want to record an expense with date, description, category, amount and currency, so that every cost is captured.
     - Amount must be greater than zero.
+    - The date cannot be after the trip ends. It can be before the trip starts, for example flights booked in advance, only while the trip is a draft; a trip with such expenses cannot be published.
     - Category comes from a fixed list (see business rules).
 12. **US-12** As the author, I want each expense converted to RON automatically, so that I never calculate it myself.
     - The rate is filled in from the National Bank of Romania, and the author can replace it with the actual rate from the bank statement (BR-02 to BR-05).
