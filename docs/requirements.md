@@ -15,7 +15,7 @@ The project has one owner, one week and a fixed technology stack, so scope must 
 | Constraint | Detail |
 | --- | --- |
 | Purpose | Portfolio piece for a full-stack developer (Python and React) interview. Interviewers will review the code, tests and Git history |
-| Deadline | One week from kick-off on 15 October 2026 (target 22 October, to be confirmed against the interview date) |
+| Deadline | One week from kick-off on 15 October 2026 (22 October, the interview date) |
 | Demo | 20-minute online interview with screen sharing, run from the owner's laptop |
 | Team | One person designs, builds, tests and presents the product |
 | Users | Single author; everyone else can only read |
@@ -83,7 +83,7 @@ Thirteen user stories cover the four features; each lists the conditions that mu
 1. **US-01** As the author, I want to create a trip with a title, start and end dates, a short summary and a cover photo, so that each journey has its own page.
    - The cover photo is uploaded on its own, separately from the trip gallery.
    - The end date cannot be before the start date. A single-day trip (same start and end date) is allowed.
-   - A trip cannot overlap the dates of another trip.
+   - A trip cannot overlap the dates of another trip. Dates are inclusive, so a trip cannot start on the day another ends.
    - A trip can be in the past, in progress or planned for the future.
    - A trip can be saved as a draft. Drafts are hidden from visitors until published.
    - The new trip appears in the trip list, newest first by creation date.
@@ -157,7 +157,7 @@ The key rule is that each expense keeps the rate it was saved with (the National
 | BR-07 | Converted amounts are rounded to 2 decimal places; totals add up the rounded amounts. |
 | BR-08 | Expense categories: Transport, Accommodation, Food and drinks, Activities, Shopping, Other. |
 | BR-09 | Places and journal entries must be dated within their trip's start and end dates. |
-| BR-10 | Trips cannot overlap. A single-day trip is allowed. |
+| BR-10 | Trips cannot overlap, and dates are inclusive: a trip cannot start on the day another ends. A single-day trip is allowed. |
 | BR-11 | Deleting a trip deletes everything that belongs to it. Deleting a journal entry deletes its photos. |
 | BR-12 | Places are recorded at city level. The same city visited on several trips shares one pin on the world map. |
 | BR-13 | The world map shows only places from published trips with a visit date of today or earlier. |
@@ -210,12 +210,12 @@ The biggest risk is the one-week timeline, so scope is fixed now, a cut order is
 | Place lookup service unavailable during the demo | New places can't be named automatically | Author types the city name and country |
 | Live demo breaks or the connection drops | Poor impression | Sample trips pre-loaded, demo rehearsed, screenshots as backup |
 
-**Open questions**
+**Answered questions**
 
-- [ ] What is the interview date? It decides whether the 22 October deadline holds.
-- [ ] What are the photo limits (maximum file size, number per trip)?
-- [ ] Can expenses be dated before the trip starts, for example flights booked in advance?
-- [ ] Can a trip start on the same day another trip ends?
+- [x] The interview is on 22 October, so the deadline holds.
+- [x] Photos are JPEGs of at most 10 MB, and a trip has at most 10 photos (#26).
+- [x] An expense can be dated before the trip starts only while the trip is a draft (#27).
+- [x] A trip cannot start on the same day another trip ends (#28).
 
 ## Timeline and milestones
 
@@ -230,6 +230,6 @@ Feedback is needed by the end of Day 1 so that building is not held up.
 
 - [x] Review the scope and out-of-scope lists and confirm nothing essential is missing.
 - [x] Refine the user stories and acceptance criteria where they are unclear or untestable.
-- [ ] Resolve the four remaining open questions with the owner.
+- [x] Resolve the four remaining open questions with the owner.
 - [ ] Draft a 20-minute demo script: which sample trip to show, in what order, what to say about each feature, and when to switch to the code and tests.
 - [ ] Prepare invented content for two or three sample trips: places, Markdown journal text, JPEG photos and expenses in at least two currencies, with a planned budget on at least one trip and one future trip to show it stays off the world map.
