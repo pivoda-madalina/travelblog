@@ -1,6 +1,6 @@
 """US-08: the author uploads JPEG photos with captions to a trip's gallery, optionally attached
-to a journal entry. Thumbnails are made on upload. Limits follow the proposed answer to #26.
-BR-11: deleting a photo or its entry removes the files. BR-14: visitors only see photos of
+to a journal entry. Thumbnails are made on upload. Limits follow #26: 10 MB per photo and 10 photos
+per trip. BR-11: deleting a photo or its entry removes the files. BR-14: visitors only see photos of
 published trips."""
 
 import io
@@ -145,15 +145,23 @@ def test_oversized_file_refused(author, trip, monkeypatch):
     assert not Photo.objects.exists()
 
 
-def test_trip_photo_limit(author, trip, monkeypatch):
-    monkeypatch.setattr("journal.models.MAX_PHOTOS_PER_TRIP", 2)
-    PhotoFactory.create_batch(2, trip=trip)
+def test_tenth_photo_is_accepted(author, trip):
+    PhotoFactory.create_batch(9, trip=trip)
+
+    response = upload(author, trip)
+
+    assert response.status_code == 201
+    assert trip.photos.count() == 10
+
+
+def test_trip_photo_limit(author, trip):
+    PhotoFactory.create_batch(10, trip=trip)
     PhotoFactory(trip=TripFactory())  # another trip's photo does not count
 
     response = upload(author, trip)
 
     assert response.status_code == 400
-    assert response.json() == {"image": ["A trip can have at most 2 photos."]}
+    assert response.json() == {"image": ["A trip can have at most 10 photos."]}
 
 
 def test_gallery_of_a_trip_in_upload_order(author, trip):

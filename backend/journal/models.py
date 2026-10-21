@@ -71,7 +71,7 @@ class Photo(models.Model):
         errors = {}
         if self.journal_entry is not None and self.journal_entry.trip_id != self.trip_id:
             errors["journal_entry"] = "Choose an entry of this trip's journal."
-        # The proposed answer to #26, used until the owner decides otherwise.
+        # At most 10 photos per trip (#26).
         if self.pk is None and self.trip.photos.count() >= MAX_PHOTOS_PER_TRIP:
             errors["image"] = f"A trip can have at most {MAX_PHOTOS_PER_TRIP} photos."
         if errors:

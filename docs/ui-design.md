@@ -242,7 +242,7 @@ Upload [author], a modal with a dropzone. It accepts several JPEGs at once, each
 ```
 
 - Files that are not JPEGs or are too large are rejected in the dropzone with a reason. The backend validates again (Pillow).
-- The size limit is open question #26.
+- Photos are at most 10 MB each, and a trip has at most 10 (#26). A photo past the limit stays in the list with the reason.
 
 Full-screen viewer (US-09, first on the cut list). Clicking any photo, here or in the journal, opens it:
 
